@@ -4,9 +4,9 @@ package dal;
  * Created by tjc on 9/2/17.
  */
 
-        import java.util.List;
+import java.util.List;
 
-        import dto.UserDTO;
+import dto.UserDTO;
 
 public interface IUserDAO {
 

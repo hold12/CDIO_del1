@@ -17,7 +17,7 @@ public class DBTester {
         printUsers(iDAO);
         //TODO test new fields...
         newUser.setIni("test");
-        newUser.assignRole("Admin");
+        newUser.addRole("Admin");
         newUser.setUserName("testName");
         newUser.setUserId(0);
         try {

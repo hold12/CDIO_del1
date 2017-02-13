@@ -47,7 +47,7 @@ public class UserDTO implements Serializable{
         this.roles = roles;
     }
 
-    public void addRole(String role){
+    public void assignRole(String role){
         this.roles.add(role);
     }
     /**

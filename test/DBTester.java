@@ -4,16 +4,16 @@
 
 import java.util.List;
 
-import dal.IUserDAO;
-import dal.IUserDAO.DALException;
+import dal.IUserAdministration;
+import dal.IUserAdministration.DataAccessException;
 import dal.UserDAODiscImpl;
-import dto.UserDTO;
+import dto.User;
 
 public class DBTester {
     //TODO refactor as JUnit test???
     public static void main(String[] args) {
-        IUserDAO iDAO = new UserDAODiscImpl();
-        UserDTO newUser = new UserDTO();
+        IUserAdministration iDAO = new UserDAODiscImpl();
+        User newUser = new User();
         printUsers(iDAO);
         //TODO test new fields...
         newUser.setIni("test");
@@ -22,13 +22,13 @@ public class DBTester {
         newUser.setUserId(0);
         try {
             iDAO.createUser(newUser);
-        } catch (DALException e) {
+        } catch (DataAccessException e) {
             e.printStackTrace();
         }
 
         try {
             iDAO.createUser(newUser);
-        } catch (DALException e1) {
+        } catch (DataAccessException e1) {
             System.out.println("User already existed - OK");
         }
 
@@ -36,7 +36,7 @@ public class DBTester {
         newUser.setUserName("2ND user");
         try {
             iDAO.createUser(newUser);
-        } catch (DALException e1) {
+        } catch (DataAccessException e1) {
             e1.printStackTrace();
         }
         printUsers(iDAO);
@@ -44,7 +44,7 @@ public class DBTester {
         newUser.setUserName("ModifiedName");
         try {
             iDAO.updateUser(newUser);
-        } catch (DALException e) {
+        } catch (DataAccessException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -53,7 +53,7 @@ public class DBTester {
 
         try {
             iDAO.deleteUser(1);
-        } catch (DALException e) {
+        } catch (DataAccessException e) {
             e.printStackTrace();
         }
 
@@ -62,15 +62,15 @@ public class DBTester {
 
     }
 
-    private static void printUsers(IUserDAO iDAO) {
+    private static void printUsers(IUserAdministration iDAO) {
         try {
             System.out.println("Printing users...");
-            List<UserDTO> userList = iDAO.getUserList();
-            for (UserDTO userDTO : userList) {
-                System.out.println(userDTO);
+            List<User> userList = iDAO.getUserList();
+            for (User user : userList) {
+                System.out.println(user);
             }
 
-        } catch (DALException e) {
+        } catch (DataAccessException e) {
             e.printStackTrace();
         }
     }

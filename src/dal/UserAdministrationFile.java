@@ -8,7 +8,7 @@ import java.util.List;
  * Created by freya on 14-02-2017.
  */
 public class UserAdministrationFile implements IUserAdministration {
-    //TODO: Implement after implementation of UserAdministrationDb.
+    //TODO: Implement after implementation of UserAdministrationDB.
 
     @Override
     public User getUser(int userId) throws DataAccessException {

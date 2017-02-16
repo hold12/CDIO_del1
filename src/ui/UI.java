@@ -15,6 +15,6 @@ public interface UI
     void closeProgram();
     void removedUserMsg(User user);
     String getUserInput();
-    User createUser();
     User editUser(User user);
+    User createUser();
 }

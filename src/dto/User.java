@@ -16,7 +16,7 @@ public class User {
     private String cpr;
     private String password;
 
-    public User(int userId, String userName, String initials, ArrayList<String> roles, String cpr, String password) {
+    public User(int userId, String userName, String initials, List<String> roles, String cpr, String password) {
         this.userId = userId;
         this.userName = userName;
         this.initials = initials;
@@ -27,10 +27,6 @@ public class User {
 
     public int getUserId() {
         return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     public String getUserName() {
@@ -53,10 +49,6 @@ public class User {
         return cpr;
     }
 
-    public void setCpr(String cpr) {
-        this.cpr = cpr;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -67,10 +59,6 @@ public class User {
 
     public List<String> getRoles() {
         return roles;
-    }
-
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
     }
 
     public void addRole(String role) {

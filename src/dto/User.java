@@ -1,7 +1,6 @@
 package dto;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by tjc on 9/2/17.

@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by freya on 14-02-2017.
  */
-public class UserAdministrationDb implements IUserAdministration {
+public class UserAdministrationDB implements IUserAdministration {
     @Override
     public User getUser(int userId) throws DataAccessException {
         return null;

@@ -6,14 +6,23 @@ import java.util.List;
 
 import dal.IUserAdministration;
 import dal.IUserAdministration.DataAccessException;
-import dal.UserDAODiscImpl;
+// TODO: Has been commented out to get rid of compile issues
+//import dal.UserDAODiscImpl;
 import dto.User;
 
 public class DBTester {
     //TODO refactor as JUnit test???
     public static void main(String[] args) {
-        IUserAdministration iDAO = new UserDAODiscImpl();
+        // TODO: Has been set yo null to get rid of compile issues
+        IUserAdministration iDAO = null/*new UserDAODiscImpl()*/;
         User newUser = new User();
+
+        /**
+         * Things to test for:
+         *    - Create user in database
+         *    -
+         */
+
         printUsers(iDAO);
         //TODO test new fields...
         newUser.setIni("test");

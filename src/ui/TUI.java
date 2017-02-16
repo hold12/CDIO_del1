@@ -152,15 +152,16 @@ public class TUI implements UI
     {
         //TODO finish writing method!
         String input;
-        String username;
+        String username = user.getUserName();
+        String initials = user.getInitials();
+        //ArrayList<String> roles = user.getRoles();
 
         do
         {
             System.out.println("Choose what you want to edit \n" +
                     "1 - Username \n" +
                     "2 - Initials \n" +
-                    "3 - Roles \n" +
-                    "4 - Cpr");
+                    "3 - Roles \n");
 
             input = scanner.nextLine();
         }

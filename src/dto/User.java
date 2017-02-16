@@ -11,7 +11,7 @@ public class User {
 
     private int userId;
     private String userName;
-    private String ini;
+    private String initials;
     private List<String> roles;
     private String cpr;
     private String password;
@@ -36,12 +36,12 @@ public class User {
         this.userName = userName;
     }
 
-    public String getIni() {
-        return ini;
+    public String getInitials() {
+        return initials;
     }
 
-    public void setIni(String ini) {
-        this.ini = ini;
+    public void setInitials(String initials) {
+        this.initials = initials;
     }
 
     public String getCpr() {
@@ -82,7 +82,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User [userId=" + userId + ", userName=" + userName + ", ini=" + ini + ", roles=" + roles + "]";
+        return "User [userId=" + userId + ", userName=" + userName + ", initials=" + initials + ", roles=" + roles + "]";
     }
 
 

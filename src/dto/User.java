@@ -16,8 +16,13 @@ public class User {
     private String cpr;
     private String password;
 
-    public User() {
-        this.roles = new ArrayList<>();
+    public User(int userId, String userName, String initials, ArrayList<String> roles, String cpr, String password) {
+        this.userId = userId;
+        this.userName = userName;
+        this.initials = initials;
+        this.roles = roles;
+        this.cpr = cpr;
+        this.password = password;
     }
 
     public int getUserId() {

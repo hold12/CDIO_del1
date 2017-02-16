@@ -12,11 +12,11 @@ public class User {
     private int userId;
     private String userName;
     private String initials;
-    private List<String> roles;
+    private ArrayList<String> roles;
     private String cpr;
     private String password;
 
-    public User(int userId, String userName, String initials, List<String> roles, String cpr, String password) {
+    public User(int userId, String userName, String initials, ArrayList<String> roles, String cpr, String password) {
         this.userId = userId;
         this.userName = userName;
         this.initials = initials;
@@ -57,7 +57,7 @@ public class User {
         this.password = password;
     }
 
-    public List<String> getRoles() {
+    public ArrayList<String> getRoles() {
         return roles;
     }
 

@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * Created by freya on 14-02-2017.
+ * Wrote by Kasper on 14-02-2017.
  */
 public class TUI implements UI
 {
-    Scanner scanner = new Scanner(System.in);
+    private Scanner scanner = new Scanner(System.in);
 
     @Override
     public void printMainMenu()
@@ -33,9 +33,9 @@ public class TUI implements UI
     @Override
     public void listUsers(ArrayList<User> listOfUser)
     {
-        for (int i = 0; i < listOfUser.size(); i++)
+        for (User user : listOfUser)
         {
-            System.out.println(listOfUser.get(i).toString());
+            System.out.println(user.toString());
         }
     }
 
@@ -54,16 +54,107 @@ public class TUI implements UI
     @Override
     public User createUser()
     {
+        String userName;
+        String initials;
+        String cpr;
+        ArrayList<String> roles;
+
+        userName = defineUsername();
+        initials = defineInitials();
+        roles = defineRoles();
+        cpr = defineCpr();
+
+        return new User(-1, userName, initials, roles, cpr, null);
+    }
+
+    @Override
+    public User editUser(User user)
+    {
+        String input;
+        String username = user.getUserName();
+        String initials = user.getInitials();
+        ArrayList<String> roles = user.getRoles();
+
+        do
+        {
+            System.out.println("Choose what you want to edit \n" +
+                    "1 - Username \n" +
+                    "2 - Initials \n" +
+                    "3 - Roles \n" +
+                    "4 - Exit");
+
+            input = scanner.nextLine();
+
+            switch(input)
+            {
+                case "1":
+                    username = defineUsername();
+                    break;
+                case "2":
+                    initials = defineInitials();
+                    break;
+                case "3":
+                    roles = defineRoles();
+                    break;
+            }
+        }
+        while (!input.equals("4"));
+
+        return new User(user.getUserId(), username, initials ,roles, user.getCpr(), user.getPassword());
+    }
+
+    @Override
+    public void removedUserMsg(User user)
+    {
+        System.out.println("This user was successfully removed: \n" +
+                user.getUserId() + "\n" +
+                user.getUserName() + "\n" +
+                user.getInitials() + "\n" +
+                user.getCpr());
+    }
+
+    private ArrayList<String> defineRoles()
+    {
+        ArrayList<String> roles = new ArrayList<>();
+
+        System.out.println();
+        System.out.print("User Roles \n" +
+                "Must be one of the following \n" +
+                "Admin \n" +
+                "Pharmacist \n" +
+                "Foreman \n" +
+                "Operator \n" +
+                "Type user roles (Separated by comma): ");
+
+        while(!roles.isEmpty())
+        {
+            for (String tempString : scanner.nextLine().split(","))
+            {
+                if (tempString.equals("Admin") ||
+                        tempString.equals("Pharmacist") ||
+                        tempString.equals("Foreman") ||
+                        tempString.equals("Operator"))
+                {
+                    System.out.println("Roles does not meet the requirements! Try again");
+                    roles.clear();
+                    break;
+                }
+                else
+                {
+                    roles.add(tempString);
+                }
+            }
+        }
+
+        return roles;
+    }
+
+    private String defineUsername()
+    {
         int userNameMaxLen = 20;
         int userNameMinLen = 2;
-        int userInitialsMaxLen = 4;
-        int userInitialsMinLen = 2;
-        int userCprLen = 10;
         String input;
-        String userName = null;
-        String initials = null;
-        String cpr = null;
-        ArrayList<String> roles = new ArrayList<>();
+        String userName = "";
 
         System.out.println("Please type following information about the user");
         System.out.print("Username (Between 2 and 20 characters): ");
@@ -79,10 +170,18 @@ public class TUI implements UI
         }
         while (input.length() > userNameMinLen && input.length() < userNameMaxLen);
 
+        return userName;
+    }
+
+    private String defineInitials()
+    {
+        int userInitialsMaxLen = 4;
+        int userInitialsMinLen = 2;
+        String input;
+        String initials = "";
+
         System.out.println();
         System.out.print("User Initials (Between 2 and 4 characters): ");
-
-
 
         do
         {
@@ -97,38 +196,14 @@ public class TUI implements UI
         }
         while(input.length() > userInitialsMinLen && input.length() < userInitialsMaxLen);
 
+        return initials;
+    }
 
-
-        System.out.println();
-        System.out.print("User Roles \n" +
-                "Must be one of the following \n" +
-                "Admin \n" +
-                "Pharmacist \n" +
-                "Foreman \n" +
-                "Operator \n" +
-                "Type user roles (Separated by comma): ");
-
-        while(!roles.isEmpty())
-        {
-            String[] tempString = scanner.nextLine().split(",");
-
-            for (int i = 0; i < tempString.length; i++)
-            {
-                if (tempString[i] != "Admin" ||
-                        tempString[i] != "Pharmacist" ||
-                        tempString[i] != "Foreman" ||
-                        tempString[i] != "Operator")
-                {
-                    System.out.println("Roles does not meet the requirements! Try again");
-                    roles.clear();
-                    break;
-                }
-                else
-                {
-                    roles.add(tempString[i]);
-                }
-            }
-        }
+    private String defineCpr()
+    {
+        int userCprLen = 10;
+        String input;
+        String cpr = "";
 
         System.out.println();
         System.out.print("User Cpr (Must be 10 characters): ");
@@ -144,39 +219,6 @@ public class TUI implements UI
         }
         while(input.length() == userCprLen);
 
-        return new User(-1, userName, initials, roles, cpr, null);
-    }
-
-    @Override
-    public User editUser(User user)
-    {
-        //TODO finish writing method!
-        String input;
-        String username = user.getUserName();
-        String initials = user.getInitials();
-        //ArrayList<String> roles = user.getRoles();
-
-        do
-        {
-            System.out.println("Choose what you want to edit \n" +
-                    "1 - Username \n" +
-                    "2 - Initials \n" +
-                    "3 - Roles \n");
-
-            input = scanner.nextLine();
-        }
-        while (!input.equals("Exit"));
-
-        return new User(-1, null, null, null, null, null);
-    }
-
-    @Override
-    public void removedUserMsg(User user)
-    {
-        System.out.println("This user was successfully removed: \n" +
-                user.getUserId() + "\n" +
-                user.getUserName() + "\n" +
-                user.getInitials() + "\n" +
-                user.getCpr());
+        return cpr;
     }
 }

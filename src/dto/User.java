@@ -1,6 +1,5 @@
 package dto;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,16 +15,17 @@ public class User {
     private String cpr;
     private String password;
 
-    public User() {
-        this.roles = new ArrayList<>();
+    public User(int userId, String userName, String ini, List<String> roles, String cpr, String password) {
+        this.userId = userId;
+        this.userName = userName;
+        this.ini = ini;
+        this.roles = roles;
+        this.cpr = cpr;
+        this.password = password;
     }
 
     public int getUserId() {
         return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     public String getUserName() {
@@ -48,10 +48,6 @@ public class User {
         return cpr;
     }
 
-    public void setCpr(String cpr) {
-        this.cpr = cpr;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -62,10 +58,6 @@ public class User {
 
     public List<String> getRoles() {
         return roles;
-    }
-
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
     }
 
     public void addRole(String role) {

@@ -13,15 +13,15 @@ public class User {
     private String ini;
     private List<String> roles;
     private String cpr;
-    private String password;
+    private Password password;
 
-    public User(int userId, String userName, String ini, List<String> roles, String cpr, String password) {
+    public User(int userId, String userName, String ini, List<String> roles, String cpr) {
         this.userId = userId;
         this.userName = userName;
         this.ini = ini;
         this.roles = roles;
         this.cpr = cpr;
-        this.password = password;
+        this.password = new Password();
     }
 
     public int getUserId() {
@@ -49,11 +49,11 @@ public class User {
     }
 
     public String getPassword() {
-        return password;
+        return this.password.getPassword();
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password.setPassword(password);
     }
 
     public List<String> getRoles() {

@@ -32,7 +32,7 @@ public class UserAdministrationDB implements IUserAdministration {
                 users.add(getUserFromResultSet(resultSet));
             }
         } catch(SQLException e) {
-            System.out.println("[UserAdministrationDB]: An error occured when trying to fetch all users from the database.");
+            System.err.println("[UserAdministrationDB]: An error occured when trying to fetch all users from the database.");
             e.printStackTrace();
             return null;
         } finally {
@@ -48,7 +48,7 @@ public class UserAdministrationDB implements IUserAdministration {
         try {
             Integer.parseInt(resultSet.getString("ID")); // TODO: Make sure all fields are spelled correctly
         } catch(Exception e) {
-            System.out.println("Invalid datatype for user id.");
+            System.err.println("Invalid datatype for user id.");
         }
 
         String userName    = resultSet.getString("userName");

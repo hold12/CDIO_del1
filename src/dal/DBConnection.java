@@ -25,7 +25,7 @@ public class DBConnection {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException e) {
-            System.out.println("[DBConnection::checkJDBCDriverExists]: Missing JDBC driver in the java project.");
+            System.err.println("[DBConnection::checkJDBCDriverExists]: Missing JDBC driver in the java project.");
             e.printStackTrace();
             return false;
         }
@@ -38,7 +38,7 @@ public class DBConnection {
         try {
             connection = DriverManager.getConnection(connectionURL, user, passwd);
         } catch (SQLException e) {
-            System.out.println("[DBConnection::canConnectToServer]: Connection failed! Check out in the console!");
+            System.err.println("[DBConnection::canConnectToServer]: Connection failed! Check out in the console!");
             e.printStackTrace();
             return false;
         }
@@ -53,7 +53,7 @@ public class DBConnection {
         if (connection != null)
             System.out.println("[DBConnection::open]: Connection established.");
         else
-            System.out.println("[DBConnection::open]: Failed to make a connection to the database server.");
+            System.err.println("[DBConnection::open]: Failed to make a connection to the database server.");
     }
 
     public void close() {
@@ -61,7 +61,7 @@ public class DBConnection {
             if (connection != null) this.connection.close();
             if (statement != null)  this.statement.close();
         } catch (SQLException e) {
-            System.out.println("[DBConnection::close]: Failed to close either database connection or statement.");
+            System.err.println("[DBConnection::close]: Failed to close either database connection or statement.");
             e.printStackTrace();
             return;
         }
@@ -77,7 +77,7 @@ public class DBConnection {
         try {
             result = statement.executeQuery(querySQL);
         } catch (SQLException e) {
-            System.out.println("[DBConnection::query]: Failed to execute SQL.");
+            System.err.println("[DBConnection::query]: Failed to execute SQL.");
             e.printStackTrace();
             return null;
         }
@@ -93,7 +93,7 @@ public class DBConnection {
         try {
             statement.executeUpdate(updateSQL);
         } catch(SQLException e) {
-            System.out.println("[DBConnection::update]: Failed to insert/update record.");
+            System.err.println("[DBConnection::update]: Failed to insert/update record.");
             e.printStackTrace();
             return;
         }
@@ -104,7 +104,7 @@ public class DBConnection {
         try {
             stmt = connection.createStatement();
         } catch (SQLException e) {
-            System.out.println("[DBConnection::createStatement]: Failed to create statement.");
+            System.err.println("[DBConnection::createStatement]: Failed to create statement.");
             e.printStackTrace();
             return null;
         }

@@ -1,6 +1,8 @@
 package ui;
 
 import dto.User;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,12 +11,11 @@ import java.util.List;
  */
 public interface UI
 {
-    void printMainMenu();
+    void printMainMenu() throws IOException;
     void printMsg(String message);
     void listUsers(List<User> listOfUsers);
-    void closeProgram();
     void removedUserMsg(User user);
-    String getUserInput();
+    String getUserInput(String message);
     User editUser(User user);
     User createUser();
 }

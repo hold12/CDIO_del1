@@ -22,6 +22,31 @@ public class TUI implements UI
     }
 
     @Override
+    public String getMenuChoice(String... menuOptions) {
+        int choice;
+
+
+        while(true) {
+            try {
+                clearConsole();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            for (int i = 0; i < menuOptions.length; i++) {
+                System.out.println(i + " - " + menuOptions[i]);
+            }
+
+            try {
+                choice = Integer.parseInt(getUserInput("Select number"));
+                return menuOptions[choice];
+            } catch (Exception e) {
+                System.out.println("You have to type a number!");
+            }
+        }
+    }
+
+    @Override
     public void printMainMenu() throws IOException
     {
         clearConsole();
@@ -120,13 +145,9 @@ public class TUI implements UI
         final String operatingSystem = System.getProperty("os.name");
 
         if (operatingSystem .contains("Windows"))
-        {
             Runtime.getRuntime().exec("cls");
-        }
         else
-        {
             Runtime.getRuntime().exec("clear");
-        }
     }
 
     private String createNumberedList(String[] list)

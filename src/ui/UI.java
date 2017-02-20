@@ -11,6 +11,7 @@ import java.util.List;
  */
 public interface UI
 {
+    String getMenuChoice(String... menuOptions);
     void printMainMenu() throws IOException;
     void printMsg(String message);
     void listUsers(List<User> listOfUsers);

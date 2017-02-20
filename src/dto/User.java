@@ -26,13 +26,23 @@ public class User {
     }
 
     //constructor for use when extracting users from DB
-    public User(int userId, String userName, String ini, List<String> roles, String cpr, String password) {
+    public User(int userId, String userName, String initials, List<String> roles, String cpr, String password) {
         this.userId = userId;
         this.userName = userName;
-        this.ini = ini;
+        this.initials = initials;
         this.roles = roles;
         this.cpr = cpr;
         this.password = new Password(password);
+    }
+
+    // Constructor to use when changing a user's password
+    public User(int userId, String userName, String initials, List<String> roles, String cpr, Password password) {
+        this.userId = userId;
+        this.userName = userName;
+        this.initials = initials;
+        this.roles = roles;
+        this.cpr = cpr;
+        this.password = password;
     }
 
     public int getUserId() {
@@ -57,6 +67,10 @@ public class User {
 
     public String getCpr() {
         return cpr;
+    }
+
+    public Password getPassword() {
+        return password;
     }
 
     public void setPassword(String password) {

@@ -23,7 +23,7 @@ public class UserAdministrationDB implements IUserAdministration {
     @Override
     public User getUser(int userId) throws DataAccessException {
         User user = null;
-        dbConnection.prepareQuery("SELECT * FROM User WHERE ID=?");
+        dbConnection.prepareQuery("SELECT * FROM user WHERE id=?");
         dbConnection.setPreparedInt(1, userId);
 
         try {
@@ -41,7 +41,7 @@ public class UserAdministrationDB implements IUserAdministration {
     @Override
     public List<User> getUserList() throws DataAccessException {
         List<User> users = new ArrayList<>();
-        ResultSet resultSet = dbConnection.query("SELECT * FROM User");
+        ResultSet resultSet = dbConnection.query("SELECT * FROM user");
 
         try {
             while(resultSet.next()) {
@@ -55,24 +55,23 @@ public class UserAdministrationDB implements IUserAdministration {
             dbConnection.close();
         }
 
-        return null;
+        return users;
     }
 
     private User getUserFromResultSet(ResultSet resultSet) throws SQLException {
         int userId = 0;
 
         try {
-            userId = Integer.parseInt(resultSet.getString("ID")); // TODO: Make sure all fields are spelled correctly
+            userId = Integer.parseInt(resultSet.getString("id")); // TODO: Make sure all fields are spelled correctly
         } catch(Exception e) {
             System.err.println("Invalid datatype for user id.");
         }
 
-        String userName    = resultSet.getString("userName");
-        String ini         = resultSet.getString("ini"); // TODO: Refactered to initials?
+        String userName    = resultSet.getString("username");
+        String ini         = resultSet.getString("initials");
         List<String> roles = new ArrayList<>(); // TODO: Make a list here
-        String cpr         = resultSet.getString("CPR");
+        String cpr         = resultSet.getString("cpr");
         String password    = resultSet.getString("password");
-
         return new User(userId, userName, ini, roles, cpr, password);
     }
 

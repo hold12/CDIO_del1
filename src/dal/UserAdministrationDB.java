@@ -62,7 +62,7 @@ public class UserAdministrationDB implements IUserAdministration {
         int userId = 0;
 
         try {
-            Integer.parseInt(resultSet.getString("ID")); // TODO: Make sure all fields are spelled correctly
+            userId = Integer.parseInt(resultSet.getString("ID")); // TODO: Make sure all fields are spelled correctly
         } catch(Exception e) {
             System.err.println("Invalid datatype for user id.");
         }

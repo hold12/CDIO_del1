@@ -76,7 +76,7 @@ public class DBConnection {
         try {
             open();
         } catch (ConnectionNeverClosedException e) {
-            System.err.println("[DBConnection::query]: The database connection was never closed before this query was executed.");
+            System.err.print("[DBConnection::query]: " + e.getMessage());
             e.printStackTrace();
             return null;
         }
@@ -89,7 +89,7 @@ public class DBConnection {
         try {
             result = statement.executeQuery(querySQL);
         } catch (SQLException e) {
-            System.err.println("[DBConnection::query]: Failed to execute SQL.");
+            System.err.print("[DBConnection::query]: " + e.getMessage());
             e.printStackTrace();
             return null;
         }

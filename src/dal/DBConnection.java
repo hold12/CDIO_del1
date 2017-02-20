@@ -9,6 +9,8 @@ import java.sql.*;
 public class DBConnection {
     private Connection connection;
     private Statement statement;
+    private PreparedStatement preparedStatement;
+    private boolean connectionIsOpen;
 
     private String host, database, user, passwd;
     private int port;
@@ -19,6 +21,8 @@ public class DBConnection {
         this.database = database;
         this.user     = user;
         this.passwd   = passwd;
+
+        this.connectionIsOpen = false;
     }
 
     private boolean checkJDBCDriverExists() {
@@ -46,7 +50,8 @@ public class DBConnection {
         return true;
     }
 
-    private void open() {
+    private void open() throws ConnectionNeverClosedException {
+        if (connectionIsOpen) throw new ConnectionNeverClosedException("[DBConnection::open]: Database connection was never closed properly.");
         if (!checkJDBCDriverExists()) return;
         if (!canConnectToServer()) return;
 
@@ -60,15 +65,22 @@ public class DBConnection {
         try {
             if (connection != null) this.connection.close();
             if (statement != null)  this.statement.close();
+            if (preparedStatement != null) this.preparedStatement.close();
         } catch (SQLException e) {
             System.err.println("[DBConnection::close]: Failed to close either database connection or statement.");
             e.printStackTrace();
-            return;
         }
     }
 
     public ResultSet query(String querySQL) {
-        open();
+        try {
+            open();
+        } catch (ConnectionNeverClosedException e) {
+            System.err.println("[DBConnection::query]: The database connection was never closed before this query was executed.");
+            e.printStackTrace();
+            return null;
+        }
+
         if (connection == null) return null;
 
         statement = createStatement();
@@ -84,19 +96,60 @@ public class DBConnection {
         return result;
     }
 
-    public void update(String updateSQL) {
-        open();
-        if (connection == null) return;
-
-        statement = createStatement();
-
+    public void setPreparedInt(int index, int value) {
+        if (preparedStatement == null) return;
         try {
-            statement.executeUpdate(updateSQL);
-        } catch(SQLException e) {
-            System.err.println("[DBConnection::update]: Failed to insert/update record.");
+            preparedStatement.setInt(index, value);
+        } catch (SQLException e) {
+            System.err.println("[DBConnection::setPreparedInt]: Unable to set int.");
             e.printStackTrace();
             return;
         }
+    }
+
+    public void prepareQuery(String querySQL) {
+        try {
+            open();
+        } catch (ConnectionNeverClosedException e) {
+            System.out.println("[DBConnection::prepareQuery]: The database connection was never closed before this query was executed.");
+            e.printStackTrace();
+            return;
+        }
+
+        if (connection != null) return;
+
+        try {
+            preparedStatement = connection.prepareStatement(querySQL);
+        } catch (SQLException e) {
+            System.err.println("[DBConnection::prepareQuery]: Unable to prepare the prepared statement.");
+            e.printStackTrace();
+            return;
+        }
+    }
+
+    public ResultSet executePreparedQuery() {
+        try {
+            return preparedStatement.executeQuery();
+        } catch (SQLException e) {
+            System.err.println("[DBConnection::executePreparedQuery]: Unable to execute prepared query.");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void update(String updateSQL) {
+//        open();
+//        if (connection == null) return;
+//
+//        statement = createStatement();
+//
+//        try {
+//            statement.executeUpdate(updateSQL);
+//        } catch(SQLException e) {
+//            System.err.println("[DBConnection::update]: Failed to insert/update record.");
+//            e.printStackTrace();
+//            return;
+//        }
     }
 
     private Statement createStatement() {
@@ -109,5 +162,10 @@ public class DBConnection {
             return null;
         }
         return stmt;
+    }
+
+    class ConnectionNeverClosedException extends Exception {
+        public ConnectionNeverClosedException() {}
+        public ConnectionNeverClosedException(String message) { super(message); }
     }
 }

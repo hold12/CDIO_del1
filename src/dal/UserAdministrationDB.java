@@ -2,6 +2,9 @@ package dal;
 
 import dto.User;
 
+import java.sql.DriverManager;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -19,7 +22,20 @@ public class UserAdministrationDB implements IUserAdministration {
 
     @Override
     public User getUser(int userId) throws DataAccessException {
-        return null;
+        User user = null;
+        dbConnection.prepareQuery("SELECT * FROM User WHERE ID=?");
+        dbConnection.setPreparedInt(1, userId);
+
+        try {
+            user = getUserFromResultSet(dbConnection.executePreparedQuery());
+        } catch (SQLException e) {
+            user = null;
+            System.err.println("[UserAdministrationDB::getUser]: Could not get user.");
+            e.printStackTrace();
+        } finally {
+            dbConnection.close();
+            return user;
+        }
     }
 
     @Override

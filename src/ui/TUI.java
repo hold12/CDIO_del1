@@ -32,7 +32,7 @@ public class TUI implements UI
     }
 
     @Override
-    public void listUsers(ArrayList<User> listOfUser)
+    public void listUsers(List<User> listOfUser)
     {
         for (User user : listOfUser)
         {

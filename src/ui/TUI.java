@@ -25,23 +25,19 @@ public class TUI implements UI
     public String getMenuChoice(String... menuOptions) {
         int choice;
 
-
         while(true) {
-            try {
-                clearConsole();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
             for (int i = 0; i < menuOptions.length; i++) {
-                System.out.println(i + " - " + menuOptions[i]);
+                System.out.println(i + 1 + " - " + menuOptions[i]);
             }
 
             try {
                 choice = Integer.parseInt(getUserInput("Select number"));
-                return menuOptions[choice];
+                System.out.println();
+                return menuOptions[choice-1];
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println("Selection out of bounds. Select one of the above menu items.");
             } catch (Exception e) {
-                System.out.println("You have to type a number!");
+                System.out.println("You have to type a number!\n");
             }
         }
     }
@@ -140,6 +136,7 @@ public class TUI implements UI
         System.out.println("This user was successfully removed: \n" + user.toString());
     }
 
+    // TODO: Remove, it does not work :'(
     private void clearConsole() throws IOException
     {
         final String operatingSystem = System.getProperty("os.name");

@@ -18,6 +18,10 @@ public class Password {
         this.password = new String(generatePassword(8, 20, 1, 1, 1));
     }
 
+    public Password(String password){
+        this.password = password;
+    }
+
     private char[] generatePassword(int minLen, int maxLen, int noOfCAPSAlpha,
                                     int noOfDigits, int noOfSplChars) {
         if (minLen > maxLen)

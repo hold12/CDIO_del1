@@ -15,6 +15,7 @@ public class User {
     private String cpr;
     private Password password;
 
+    //constructor to create new users
     public User(int userId, String userName, String ini, List<String> roles, String cpr) {
         this.userId = userId;
         this.userName = userName;
@@ -22,6 +23,16 @@ public class User {
         this.roles = roles;
         this.cpr = cpr;
         this.password = new Password();
+    }
+
+    //constructor for use when extracting users from DB
+    public User(int userId, String userName, String ini, List<String> roles, String cpr, String password) {
+        this.userId = userId;
+        this.userName = userName;
+        this.ini = ini;
+        this.roles = roles;
+        this.cpr = cpr;
+        this.password = new Password(password);
     }
 
     public int getUserId() {

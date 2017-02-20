@@ -4,11 +4,12 @@ import dto.User;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
 /**
- * Wrote by Kasper on 14-02-2017.
+ * Created by Kasper on 14-02-2017.
  */
 public class TUI implements UI
 {
@@ -89,7 +90,8 @@ public class TUI implements UI
                     initials = getUserInput("Enter new initials");
                     break;
                 case "3":
-                    roles.add(getUserInput("Enter new roles"));
+                    String[] newRoles = getUserInput("Enter new roles, separate with comma").split(",");
+                    roles = Arrays.asList(newRoles);
                     break;
             }
         }

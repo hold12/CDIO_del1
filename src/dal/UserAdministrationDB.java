@@ -73,7 +73,7 @@ public class UserAdministrationDB implements IUserAdministration {
         String cpr         = resultSet.getString("CPR");
         String password    = resultSet.getString("password");
 
-        return new User(userId, userName, ini, roles, cpr);
+        return new User(userId, userName, ini, roles, cpr, password);
     }
 
     @Override

@@ -5,7 +5,7 @@ import dto.User;
 import java.util.ArrayList;
 
 /**
- * Created by freya on 14-02-2017.
+ * Wrote by Kasper on 14-02-2017.
  */
 public interface UI
 {

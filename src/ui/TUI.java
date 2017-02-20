@@ -2,8 +2,9 @@ package ui;
 
 import dto.User;
 
+import java.io.IOException;
 import java.util.ArrayList;
-
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -57,14 +58,14 @@ public class TUI implements UI
         String userName;
         String initials;
         String cpr;
-        ArrayList<String> roles;
+        List<String> roles;
 
         userName = defineUsername();
         initials = defineInitials();
         roles = defineRoles();
         cpr = defineCpr();
 
-        return new User(-1, userName, initials, roles, cpr, null);
+        return new User(-1, userName, initials, roles, cpr);
     }
 
     @Override
@@ -73,7 +74,7 @@ public class TUI implements UI
         String input;
         String username = user.getUserName();
         String initials = user.getInitials();
-        ArrayList<String> roles = user.getRoles();
+        List<String> roles = user.getRoles();
 
         do
         {
@@ -100,7 +101,7 @@ public class TUI implements UI
         }
         while (!input.equals("4"));
 
-        return new User(user.getUserId(), username, initials ,roles, user.getCpr(), user.getPassword());
+        return new User(user.getUserId(), username, initials ,roles, user.getCpr());
     }
 
     @Override
@@ -113,9 +114,23 @@ public class TUI implements UI
                 user.getCpr());
     }
 
-    private ArrayList<String> defineRoles()
+    public void clearConsole() throws IOException
     {
-        ArrayList<String> roles = new ArrayList<>();
+        final String operatingSystem = System.getProperty("os.name");
+
+        if (operatingSystem .contains("Windows"))
+        {
+            Runtime.getRuntime().exec("cls");
+        }
+        else
+        {
+            Runtime.getRuntime().exec("clear");
+        }
+    }
+
+    private List<String> defineRoles()
+    {
+        List<String> roles = new ArrayList<>();
 
         System.out.println();
         System.out.print("User Roles \n" +

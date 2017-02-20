@@ -1,5 +1,6 @@
 package ui;
 
+import dto.Password;
 import dto.User;
 
 import java.io.IOException;
@@ -53,17 +54,21 @@ public class TUI implements UI
     @Override
     public User createUser()
     {
+        int userId;
         String userName;
         String initials;
         String cpr;
+        String[] tempRoles;
         List<String> roles = new ArrayList<>();
 
+        userId = Integer.parseInt(getUserInput("Enter user id"));
         userName = getUserInput("Enter username");
         initials = getUserInput("Enter initials");
+        tempRoles = getUserInput("Enter roles, separated by comma").split(",");
         cpr = getUserInput("Enter cpr");
-        roles.add(getUserInput("Enter roles"));
+        roles = Arrays.asList(tempRoles);
 
-        return new User(-1, userName, initials, roles, cpr);
+        return new User(userId, userName, initials, roles, cpr);
     }
 
     @Override
@@ -72,7 +77,8 @@ public class TUI implements UI
         String input;
         String username = user.getUserName();
         String initials = user.getInitials();
-        String[] optionList = {"Username", "Initials", "Roles", "Exit"};
+        Password password = user.getPassword();
+        String[] optionList = {"Username", "Initials", "Roles", "Password", "Exit"};
         List<String> roles = user.getRoles();
 
         do
@@ -93,11 +99,14 @@ public class TUI implements UI
                     String[] newRoles = getUserInput("Enter new roles, separate with comma").split(",");
                     roles = Arrays.asList(newRoles);
                     break;
+                case "4":
+                    password.setPassword(getUserInput("Enter new password"));
+                    break;
             }
         }
-        while (!input.equals("4"));
+        while (!input.equals(String.valueOf(optionList.length))); //Converting int to string, to compare
 
-        return new User(user.getUserId(), username, initials ,roles, user.getCpr());
+        return new User(user.getUserId(), username, initials ,roles, user.getCpr(), password);
     }
 
     @Override

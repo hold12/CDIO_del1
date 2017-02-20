@@ -48,10 +48,6 @@ public class User {
         return cpr;
     }
 
-    public String getPassword() {
-        return this.password.getPassword();
-    }
-
     public void setPassword(String password) {
         this.password.setPassword(password);
     }

@@ -147,3 +147,4 @@ local.properties
 
 # Mongo Explorer plugin:
 .idea/mongoSettings.xml
+.idea/inspectionProfiles/Project_Default.xml

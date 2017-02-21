@@ -10,29 +10,39 @@ public class User {
 
     private int userId;
     private String userName;
-    private String ini;
+    private String initials;
     private List<String> roles;
     private String cpr;
     private Password password;
 
     //constructor to create new users
-    public User(int userId, String userName, String ini, List<String> roles, String cpr) {
+    public User(int userId, String userName, String initials, List<String> roles, String cpr) {
         this.userId = userId;
         this.userName = userName;
-        this.ini = ini;
+        this.initials = initials;
         this.roles = roles;
         this.cpr = cpr;
         this.password = new Password();
     }
 
     //constructor for use when extracting users from DB
-    public User(int userId, String userName, String ini, List<String> roles, String cpr, String password) {
+    public User(int userId, String userName, String initials, List<String> roles, String cpr, String password) {
         this.userId = userId;
         this.userName = userName;
-        this.ini = ini;
+        this.initials = initials;
         this.roles = roles;
         this.cpr = cpr;
         this.password = new Password(password);
+    }
+
+    // Constructor to use when changing a user's password
+    public User(int userId, String userName, String initials, List<String> roles, String cpr, Password password) {
+        this.userId = userId;
+        this.userName = userName;
+        this.initials = initials;
+        this.roles = roles;
+        this.cpr = cpr;
+        this.password = password;
     }
 
     public int getUserId() {
@@ -47,16 +57,20 @@ public class User {
         this.userName = userName;
     }
 
-    public String getIni() {
-        return ini;
+    public String getInitials() {
+        return initials;
     }
 
-    public void setIni(String ini) {
-        this.ini = ini;
+    public void setInitials(String initials) {
+        this.initials = initials;
     }
 
     public String getCpr() {
         return cpr;
+    }
+
+    public Password getPassword() {
+        return password;
     }
 
     public void setPassword(String password) {
@@ -81,7 +95,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User [userId=" + userId + ", userName=" + userName + ", ini=" + ini + ", roles=" + roles + "]";
+        return "User [userId=" + userId + ", userName=" + userName + ", initials=" + initials + ", roles=" + roles + "]";
     }
 
 

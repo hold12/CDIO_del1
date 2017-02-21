@@ -2,17 +2,21 @@ package ui;
 
 import dto.User;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * Created by freya on 14-02-2017.
+ * Wrote by Kasper on 14-02-2017.
  */
 public interface UI
 {
-    void printWelcomeMsg();
+    String getMenuChoice(String... menuOptions);
+    void printMainMenu() throws IOException;
     void printMsg(String message);
-    void listUsers();
-    void closeProgram();
-    String getUserInput();
-    User createUser();
+    void listUsers(List<User> listOfUsers);
+    void removedUserMsg(User user);
+    String getUserInput(String message);
     User editUser(User user);
-    boolean removeUser(User user);
+    User createUser();
 }

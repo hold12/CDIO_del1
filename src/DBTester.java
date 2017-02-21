@@ -15,7 +15,8 @@
 //    public static void main(String[] args) {
 //        // TODO: Has been set yo null to get rid of compile issues
 //        IUserAdministration iDAO = null/*new UserDAODiscImpl()*/;
-//        User newUser = new User();
+//        //TODO Give newUser constructor parameters
+//        User newUser = new User(-1, null, null, null, null, null);
 //
 //        /**
 //         * Things to test for:
@@ -25,10 +26,11 @@
 //
 //        printUsers(iDAO);
 //        //TODO test new fields...
-//        newUser.setIni("test");
+//        newUser.setInitials("test");
 //        newUser.addRole("Admin");
 //        newUser.setUserName("testName");
-//        newUser.setUserId(0);
+//        //TODO Rewrite
+//        //newUser.setUserId(0);
 //        try {
 //            iDAO.createUser(newUser);
 //        } catch (DataAccessException e) {
@@ -41,7 +43,8 @@
 //            System.out.println("User already existed - OK");
 //        }
 //
-//        newUser.setUserId(1);
+//        //TODO Rewrite
+//        //newUser.setUserId(1);
 //        newUser.setUserName("2ND user");
 //        try {
 //            iDAO.createUser(newUser);
@@ -49,7 +52,8 @@
 //            e1.printStackTrace();
 //        }
 //        printUsers(iDAO);
-//        newUser.setUserId(0);
+//        //TODO Rewrite
+//        //newUser.setUserId(0);
 //        newUser.setUserName("ModifiedName");
 //        try {
 //            iDAO.updateUser(newUser);

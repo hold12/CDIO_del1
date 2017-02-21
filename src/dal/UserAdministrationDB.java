@@ -1,10 +1,8 @@
 package dal;
 
+import dto.Password;
 import dto.User;
 
-import java.sql.DriverManager;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -77,7 +75,27 @@ public class UserAdministrationDB implements IUserAdministration {
 
     @Override
     public void createUser(User user) throws DataAccessException {
+//        dbConnection.prepareQuery(
+//                "INSERT INTO user (username, initials, cpr, password) VALUES" +
+//                        "(?, ?, ?, ?)"
+//        );
+//        dbConnection.setPreparedString(0, user.getUserName());
+//        dbConnection.setPreparedString(1, user.getInitials());
+//        dbConnection.setPreparedString(2, user.getCpr());
+//        dbConnection.setPreparedString(3, new Password().getPassword());
+        String username = user.getUserName();
+        String initials = user.getInitials();
+        List<String> roles = user.getRoles();
+        String cpr = user.getCpr();
+        String password = user.getPassword().getPassword();
 
+        String sql = String.format("INSERT INTO user (username,initials,cpr,password) " +
+                "VALUES ('%s','%s','%s','%s')", username, initials, cpr, password);
+        System.out.println(sql);
+        dbConnection.update(sql);
+        System.out.println("Inserting new user: " + user.getUserName());
+
+        dbConnection.executePreparedUpdate();
     }
 
     @Override

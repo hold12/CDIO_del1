@@ -36,13 +36,16 @@ public class UIController {
 
         String userChoice = ui.getMenuChoice(menuOptions);
 
+        // Create User
         if (userChoice.equals(menuOptions[0])) {
             try {
                 userAdm.createUser(ui.createUser());
             } catch (IUserAdministration.DataAccessException e) {
 
             }
-        } else if (userChoice.equals(menuOptions[1])) {
+        }
+        // Show Users
+        else if (userChoice.equals(menuOptions[1])) {
             List<User> users = new ArrayList<>();
             try {
                 users = userAdm.getUserList();

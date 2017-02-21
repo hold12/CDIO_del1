@@ -8,7 +8,7 @@ import ui.TUI;
  */
 public class Main {
     public static void main(String[] args) {
-        DBConnection dbc = new DBConnection("localhost", 3306, "CDIO_del1", "root", "root");
+        DBConnection dbc = new DBConnection("sql.wiberg.tech", 3306, "CDIO_del1", "hold12", "2017_h0lD!2");
         UserAdministrationDB uad = new UserAdministrationDB(dbc);
 
         UIController uic = new UIController(new TUI(), uad);

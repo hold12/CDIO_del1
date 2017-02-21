@@ -67,11 +67,34 @@ public class UserAdministrationDB implements IUserAdministration {
 
         String userName    = resultSet.getString("username");
         String ini         = resultSet.getString("initials");
-        List<String> roles = new ArrayList<>(); // TODO: Make a list here
+        List<String> roles = getRoleFromUser(userId);
         String cpr         = resultSet.getString("cpr");
         String password    = resultSet.getString("password");
         return new User(userId, userName, ini, roles, cpr, password);
     }
+
+    private List<String> getRoleFromUser(int userId) {
+        ResultSet resultSet = dbConnection.query("" +
+                "SELECT role_name FROM user " +
+                "JOIN user_role ON user_role.user_id = user.id " +
+                "JOIN role ON role.id = user_role.role_id " +
+                "WHERE user.id = " + userId);
+
+        List<String> roles = new ArrayList<>(); //
+
+        try {
+            while (resultSet.next()) {
+                roles.add(resultSet.getString("role_name"));
+            }
+        } catch (SQLException e) {
+            System.err.println("Invalid SQL Statement");
+        } finally {
+            dbConnection.close();
+        }
+
+        return roles;
+    }
+
 
     @Override
     public void createUser(User user) throws DataAccessException {

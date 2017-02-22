@@ -1,9 +1,9 @@
 package ui;
 
+import dal.UserAdministrationDB;
 import dto.User;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,11 +12,14 @@ import java.util.List;
 public interface UI
 {
     String getMenuChoice(String... menuOptions);
-    void printMainMenu() throws IOException;
-    void printMsg(String message);
-    void listUsers(List<User> listOfUsers);
-    void removedUserMsg(User user);
     String getUserInput(String message);
-    User editUser(User user);
-    User createUser();
+    void printMsg(String message);
+    void showRoles(String[] roles);
+
+    // TODO: Methods below should be removed.
+//    void printMainMenu() throws IOException;
+//    void listUsers(List<User> listOfUsers);
+//    void removedUserMsg(User user);
+//    User editUser(User user);
+//    User createUser();
 }

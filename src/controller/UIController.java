@@ -1,6 +1,5 @@
 package controller;
 
-import dal.DBConnection;
 import dal.IUserAdministration;
 import dal.UserAdministrationDB;
 import dto.User;
@@ -27,50 +26,41 @@ public class UIController {
     }
 
     public void mainMenu() {
-        final String[] menuOptions = {
-                "Create User",
-                "Show Users",
-                "Edit User",
-                "Delete User",
-                "Exit Program"
-        };
+        while (true) {
+            final String[] menuOptions = {
+                    "Create User",
+                    "Show Users",
+                    "Edit User",
+                    "Delete User",
+                    "Exit Program"
+            };
 
-        String userChoice = ui.getMenuChoice(menuOptions);
+            String userChoice = ui.getMenuChoice(menuOptions);
 
-        // Create User
-        if (userChoice.equals(menuOptions[0])) {
-            try {
-                userAdm.createUser(createUser());
-            } catch (IUserAdministration.DataAccessException e) {
-
+            // Create User
+            if (userChoice.equals(menuOptions[0])) {
+                try {
+                    userAdm.createUser(createUser());
+                } catch (IUserAdministration.DataAccessException e) {
+                    // TODO: Add catch
+                }
             }
-        }
-        // Show Users
-        else if (userChoice.equals(menuOptions[1])) {
-            List<User> users = new ArrayList<>();
-            try {
-                users = userAdm.getUserList();
-            } catch (IUserAdministration.DataAccessException e) {
+            // Show Users
+            else if (userChoice.equals(menuOptions[1])) {
+                List<User> users = new ArrayList<>();
+                try {
+                    users = userAdm.getUserList();
+                } catch (IUserAdministration.DataAccessException e) {
+                    // TODO: Add catch
+                }
 
+                for (User user : users)
+                    ui.printMsg(user.toString());
             }
-
-            for (User user : users)
-                System.out.println(user);
+            // Exit
+            else if (userChoice.equals(menuOptions[menuOptions.length - 1]))
+                return;
         }
-        // TEST
-        else if (userChoice.equals(menuOptions[menuOptions.length - 1]))
-            testMethod();
-    }
-
-    private void testMethod() {
-        User user;
-        try {
-            System.out.println("Role id for admin = " + userAdm.getRoleId("admin"));
-            user = userAdm.getUser("user11");
-        } catch (IUserAdministration.DataAccessException e) {
-            return;
-        }
-//        System.out.println(user.getUserName());
     }
 
     private User createUser() {
@@ -95,14 +85,11 @@ public class UIController {
         String[] roles;
         try {
             roles = userAdm.getUserRoles();
-            System.out.print("|");
-            for (String role : roles) {
-                System.out.print(" " + role + " |");
-            }
-            System.out.println();
         } catch (IUserAdministration.DataAccessException e) {
-
+            // TODO: Add catch
+            return;
         }
 
+        ui.showRoles(roles);
     }
 }

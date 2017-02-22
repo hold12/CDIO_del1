@@ -1,12 +1,8 @@
 package ui;
 
-import dto.Password;
-import dto.User;
+import dal.IUserAdministration;
+import dal.UserAdministrationDB;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -43,26 +39,9 @@ public class TUI implements UI
     }
 
     @Override
-    public void printMainMenu() throws IOException
-    {
-        clearConsole();
-        String[] optionList = {"Create user", "Show users", "Edit user", "Delete user", "Exit program"};
-        System.out.print(createNumberedList(optionList , "Choose a following option by typing the number"));
-    }
-
-    @Override
     public void printMsg(String message)
     {
         System.out.println(message);
-    }
-
-    @Override
-    public void listUsers(List<User> listOfUser)
-    {
-        for (User user : listOfUser)
-        {
-            System.out.println(user.toString());
-        }
     }
 
     @Override
@@ -73,102 +52,133 @@ public class TUI implements UI
     }
 
     @Override
-    public User createUser()
-    {
-        int userId;
-        String userName;
-        String initials;
-        String cpr;
-        String[] tempRoles;
-        List<String> roles = new ArrayList<>();
-
-        userId = Integer.parseInt(getUserInput("Enter user id"));
-        userName = getUserInput("Enter username");
-        initials = getUserInput("Enter initials");
-        tempRoles = getUserInput("Enter roles, separated by comma").split(",");
-        cpr = getUserInput("Enter cpr");
-        roles = Arrays.asList(tempRoles);
-
-        return new User(userId, userName, initials, roles, cpr);
-    }
-
-    @Override
-    public User editUser(User user)
-    {
-        String input;
-        String username = user.getUserName();
-        String initials = user.getInitials();
-        Password password = user.getPassword();
-        String[] optionList = {"Username", "Initials", "Roles", "Password", "Exit"};
-        List<String> roles = user.getRoles();
-
-        do
-        {
-            System.out.print(createNumberedList(optionList ,"Choose what you want to edit"));
-
-            input = scanner.nextLine();
-
-            switch(input)
-            {
-                case "1":
-                    username = getUserInput("Enter new username");
-                    break;
-                case "2":
-                    initials = getUserInput("Enter new initials");
-                    break;
-                case "3":
-                    String[] newRoles = getUserInput("Enter new roles, separate with comma").split(",");
-                    roles = Arrays.asList(newRoles);
-                    break;
-                case "4":
-                    password.setPassword(getUserInput("Enter new password"));
-                    break;
-            }
+    public void showRoles(String[] roles) {
+        System.out.print("|");
+        for (String role : roles) {
+            System.out.print(" " + role + " |");
         }
-        while (!input.equals(String.valueOf(optionList.length))); //Converting int to string, to compare
-
-        return new User(user.getUserId(), username, initials ,roles, user.getCpr(), password);
+        System.out.println();
     }
 
-    @Override
-    public void removedUserMsg(User user)
-    {
-        System.out.println("This user was successfully removed: \n" + user.toString());
-    }
+    //    private String createNumberedList(String[] list)
+//    {
+//        String newList = "";
+//        int count = 1;
+//
+//        for (String element : list)
+//        {
+//            newList += count + " - " + element + "\n";
+//        }
+//
+//        return newList;
+//    }
+//
+//    private String createNumberedList(String[] list, String messageBeforeList)
+//    {
+//        String newList = "";
+//
+//        newList += messageBeforeList + "\n";
+//        newList += createNumberedList(list);
+//
+//        return newList;
+//    }
+//    }
 
-    // TODO: Remove, it does not work :'(
-    private void clearConsole() throws IOException
-    {
-        final String operatingSystem = System.getProperty("os.name");
+//    @Override
 
-        if (operatingSystem .contains("Windows"))
-            Runtime.getRuntime().exec("cls");
-        else
-            Runtime.getRuntime().exec("clear");
-    }
+    //    @Override
+//    public void printMainMenu() throws IOException
+//    {
+//        clearConsole();
+//        String[] optionList = {"Create user", "Show users", "Edit user", "Delete user", "Exit program"};
+//        System.out.print(createNumberedList(optionList , "Choose a following option by typing the number"));
 
-    private String createNumberedList(String[] list)
-    {
-        String newList = "";
-        int count = 1;
+//    public void listUsers(List<User> listOfUser)
+//    {
+//        for (User user : listOfUser)
+//        {
+//            System.out.println(user.toString());
+//        }
+//    }
 
-        for (String element : list)
-        {
-            newList += count + " - " + element + "\n";
-        }
 
-        return newList;
-    }
 
-    private String createNumberedList(String[] list, String messageBeforeList)
-    {
-        String newList = "";
+//    @Override
+//    public User createUser()
+//    {
+//        int userId;
+//        String userName;
+//        String initials;
+//        String cpr;
+//        String[] tempRoles;
+//        List<String> roles = new ArrayList<>();
+//
+//        userId = Integer.parseInt(getUserInput("Enter user id"));
+//        userName = getUserInput("Enter username");
+//        initials = getUserInput("Enter initials");
+//        tempRoles = getUserInput("Enter roles, separated by comma").split(",");
+//        cpr = getUserInput("Enter cpr");
+//        roles = Arrays.asList(tempRoles);
+//
+//        return new User(userId, userName, initials, roles, cpr);
+//    }
 
-        newList += messageBeforeList + "\n";
-        newList += createNumberedList(list);
+//    @Override
+//    public User editUser(User user)
+//    {
+//        String input;
+//        String username = user.getUserName();
+//        String initials = user.getInitials();
+//        Password password = user.getPassword();
+//        String[] optionList = {"Username", "Initials", "Roles", "Password", "Exit"};
+//        List<String> roles = user.getRoles();
+//
+//        do
+//        {
+//            System.out.print(createNumberedList(optionList ,"Choose what you want to edit"));
+//
+//            input = scanner.nextLine();
+//
+//            switch(input)
+//            {
+//                case "1":
+//                    username = getUserInput("Enter new username");
+//                    break;
+//                case "2":
+//                    initials = getUserInput("Enter new initials");
+//                    break;
+//                case "3":
+//                    String[] newRoles = getUserInput("Enter new roles, separate with comma").split(",");
+//                    roles = Arrays.asList(newRoles);
+//                    break;
+//                case "4":
+//                    password.setPassword(getUserInput("Enter new password"));
+//                    break;
+//            }
+//        }
+//        while (!input.equals(String.valueOf(optionList.length))); //Converting int to string, to compare
+//
+//        return new User(user.getUserId(), username, initials ,roles, user.getCpr(), password);
+//    }
+//
+//    @Override
+//    public void removedUserMsg(User user)
+//    {
+//        System.out.println("This user was successfully removed: \n" + user.toString());
+//    }
+//
+//    // TODO: Remove, it does not work :'(
+//    private void clearConsole() throws IOException
+//    {
+//        final String operatingSystem = System.getProperty("os.name");
+//
+//        if (operatingSystem .contains("Windows"))
+//            Runtime.getRuntime().exec("cls");
+//        else
+//            Runtime.getRuntime().exec("clear");
+//    }
 
-        return newList;
-    }
+
 
     //This is trash...
 

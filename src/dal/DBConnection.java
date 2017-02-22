@@ -55,8 +55,9 @@ public class DBConnection {
         if (!checkJDBCDriverExists()) return;
         if (!canConnectToServer()) return;
 
-        if (connection != null)
-            System.out.println("[DBConnection::open]: Connection established.");
+        if (connection != null) {
+//            System.out.println("[DBConnection::open]: Connection established.");
+        }
         else
             System.err.println("[DBConnection::open]: Failed to make a connection to the database server.");
     }
@@ -122,7 +123,7 @@ public class DBConnection {
         try {
             open();
         } catch (ConnectionNeverClosedException e) {
-            System.out.println("[DBConnection::prepareQuery]: The database connection was never closed before this query was executed.");
+            System.err.println("[DBConnection::prepareQuery]: The database connection was never closed before this query was executed.");
             e.printStackTrace();
             return;
         }

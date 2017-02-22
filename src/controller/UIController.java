@@ -35,27 +35,19 @@ public class UIController {
                     "Exit Program"
             };
 
-            String userChoice = ui.getMenuChoice(menuOptions);
+            final String userChoice = ui.getMenuChoice(menuOptions);
 
             // Create User
             if (userChoice.equals(menuOptions[0])) {
-                try {
-                    userAdm.createUser(createUser());
-                } catch (IUserAdministration.DataAccessException e) {
-                    // TODO: Add catch
-                }
+                createUser();
             }
             // Show Users
             else if (userChoice.equals(menuOptions[1])) {
-                List<User> users = new ArrayList<>();
-                try {
-                    users = userAdm.getUserList();
-                } catch (IUserAdministration.DataAccessException e) {
-                    // TODO: Add catch
-                }
-
-                for (User user : users)
-                    ui.printMsg(user.toString());
+                listUsers();
+            }
+            // Edit User
+            else if (userChoice.equals(menuOptions[2])) {
+                editUser();
             }
             // Exit
             else if (userChoice.equals(menuOptions[menuOptions.length - 1]))
@@ -63,7 +55,21 @@ public class UIController {
         }
     }
 
-    private User createUser() {
+    private void listUsers() {
+        List<User> users = new ArrayList<>();
+        try {
+            users = userAdm.getUserList();
+        } catch (IUserAdministration.DataAccessException e) {
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+            return;
+        }
+
+        for (User user : users)
+            ui.printMsg(user.toString());
+    }
+
+    private void createUser() {
         String username;
         String initials;
         String cpr = "";
@@ -76,7 +82,83 @@ public class UIController {
         outputRoles();
         roles = ui.getUserInput("Enter roles for user, separated by comma (,)").split(",");
 
-        return new User(-1, username, initials, Arrays.asList(roles), cpr);
+        try {
+            userAdm.createUser(new User(-1, username, initials, Arrays.asList(roles), cpr));
+        } catch (IUserAdministration.DataAccessException e) {
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+            return;
+        }
+    }
+
+    private void editUser() {
+        ui.printMsg("What user do you want to edit?");
+
+        final User user = getUser();
+        final String[] menuOptions = {
+                "Change Username",
+                "Change Initials",
+                /*"Add Roles",*/
+                /*"Remove Roles",*/
+                /*"Change CPR"*/
+                "Finish Editing"
+        };
+
+        ui.printMsg("Changing user: " + user.toString());
+
+        while (true) {
+            String newUserChoice = ui.getMenuChoice(menuOptions);
+
+            if (newUserChoice.equals(menuOptions[0])) // Change Username
+                changeUsername(user);
+            if (newUserChoice.equals(menuOptions[1])) // Change Initials
+                changeInitials(user);
+            if (newUserChoice.equals(menuOptions[menuOptions.length - 1])) {
+                try {
+                    userAdm.updateUser(user);
+                } catch (IUserAdministration.DataAccessException e) {
+                    System.err.println(e.getMessage());
+                    e.printStackTrace();
+                    return;
+                }
+                break;
+            }
+        }
+        ui.printMsg("");
+    }
+
+    private void changeUsername(User user) {
+        ui.printMsg("Current username = " + user.getUserName());
+        String newUsername = ui.getUserInput("Type a new username");
+        user.setUserName(newUsername);
+        ui.printMsg("Change username to " + user.getUserName());
+    }
+
+    private void changeInitials(User user) {
+        ui.printMsg("Current initials = " + user.getInitials());
+        String newInitials = ui.getUserInput("Type the new initials");
+        user.setInitials(newInitials);
+        ui.printMsg("Change initials to " + user.getInitials());
+    }
+
+    private User getUser() {
+        User user;
+        int userId = -1;
+        String input;
+        try {
+            input = ui.getUserInput("Select a user by name or id");
+            try {
+                userId = Integer.parseInt(input);
+            } catch (Exception e) {}
+            if (userId != -1)
+                return userAdm.getUser(userId);
+            else
+                return userAdm.getUser(input);
+        } catch (IUserAdministration.DataAccessException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
     }
 
 

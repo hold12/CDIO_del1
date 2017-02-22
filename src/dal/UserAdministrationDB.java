@@ -1,5 +1,6 @@
 package dal;
 
+import controller.CprValidation;
 import dto.User;
 
 import java.sql.ResultSet;
@@ -19,10 +20,11 @@ public class UserAdministrationDB implements IUserAdministration {
 
     @Override
     public User getUser(int userId) throws DataAccessException {
-        ResultSet resultSet = dbConnection.query("SELECT * FROM user WHERE id=" + userId + " LIMIT 1");
+        ResultSet resultSet = dbConnection.query("SELECT * FROM user WHERE id = " + userId + " LIMIT 1");
         User user;
 
         try {
+            resultSet.next();
             user = getUserFromResultSet(resultSet);
         } catch (SQLException e) {
             System.err.println("[]: Could not fetch user with id = " + userId);
@@ -152,6 +154,9 @@ public class UserAdministrationDB implements IUserAdministration {
         String sql = String.format("INSERT INTO user (username,initials,cpr,password) " +
                 "VALUES ('%s','%s','%s','%s')", username, initials, cpr, password);
         System.out.println(sql);
+
+        if (!CprValidation.isCprValid(cpr)) throw new DataAccessException("[UserAdministrationDB::createUser]: CPR does not have correct format!");
+
         dbConnection.update(sql);
         System.out.println("Inserting new user: " + user.getUserName());
 
@@ -174,7 +179,6 @@ public class UserAdministrationDB implements IUserAdministration {
         String sql = String.format("INSERT INTO user_role (user_id,role_id) " +
                 "VALUES (%d,%d)", userId, roleId);
 
-        System.out.println(sql);
         dbConnection.update(sql);
         dbConnection.close();
     }
@@ -216,7 +220,24 @@ public class UserAdministrationDB implements IUserAdministration {
 
     @Override
     public void updateUser(User user) throws DataAccessException {
+        final User oldUser = getUser(user.getUserId());
+        int changeCount = 0;
+        String sql  = "UPDATE user SET";
+        if (!oldUser.getUserName().equals(user.getUserName())) {// Username has been changed
+            if (changeCount > 0) sql += ", ";
+            changeCount++;
+            sql += " username =  '" + user.getUserName() + "'";
+        }
+        if (!oldUser.getInitials().equals(user.getInitials())) {// Initials has been changed
+            if (changeCount > 0) sql += ", ";
+            changeCount++;
+            sql += " initials = '" + user.getInitials() + "'";
+        }
+        if (changeCount == 0) return; // No changes was made
+        sql += "WHERE id = " + user.getUserId();
 
+        dbConnection.update(sql);
+        dbConnection.close();
     }
 
     @Override

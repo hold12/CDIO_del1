@@ -98,6 +98,7 @@ public class UIController {
         final String[] menuOptions = {
                 "Change Username",
                 "Change Initials",
+                "Generate New Password",
                 /*"Add Roles",*/
                 /*"Remove Roles",*/
                 /*"Change CPR"*/
@@ -113,6 +114,8 @@ public class UIController {
                 changeUsername(user);
             if (newUserChoice.equals(menuOptions[1])) // Change Initials
                 changeInitials(user);
+            if (newUserChoice.equals(menuOptions[2])) // Generate New Password
+                user.generateNewPassword();
             if (newUserChoice.equals(menuOptions[menuOptions.length - 1])) {
                 try {
                     userAdm.updateUser(user);

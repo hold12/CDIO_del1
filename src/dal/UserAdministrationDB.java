@@ -233,6 +233,11 @@ public class UserAdministrationDB implements IUserAdministration {
             changeCount++;
             sql += " initials = '" + user.getInitials() + "'";
         }
+        if (!oldUser.getPassword().getPassword().equals(user.getPassword().getPassword())) {// TODO: Make equals method in password instead
+            if (changeCount > 0) sql += ", ";
+            changeCount++;
+            sql += " password = '" + user.getPassword().getPassword() + "'";
+        }
         if (changeCount == 0) return; // No changes was made
         sql += "WHERE id = " + user.getUserId();
 

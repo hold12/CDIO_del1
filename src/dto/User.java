@@ -73,8 +73,8 @@ public class User {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password.setPassword(password);
+    public void generateNewPassword() {
+        this.password = new Password();
     }
 
     public List<String> getRoles() {

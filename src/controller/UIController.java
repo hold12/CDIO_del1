@@ -7,6 +7,7 @@ import dto.User;
 import ui.UI;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -39,7 +40,7 @@ public class UIController {
         // Create User
         if (userChoice.equals(menuOptions[0])) {
             try {
-                userAdm.createUser(ui.createUser());
+                userAdm.createUser(createUser());
             } catch (IUserAdministration.DataAccessException e) {
 
             }
@@ -56,5 +57,52 @@ public class UIController {
             for (User user : users)
                 System.out.println(user);
         }
+        // TEST
+        else if (userChoice.equals(menuOptions[menuOptions.length - 1]))
+            testMethod();
+    }
+
+    private void testMethod() {
+        User user;
+        try {
+            System.out.println("Role id for admin = " + userAdm.getRoleId("admin"));
+            user = userAdm.getUser("user11");
+        } catch (IUserAdministration.DataAccessException e) {
+            return;
+        }
+//        System.out.println(user.getUserName());
+    }
+
+    private User createUser() {
+        String username;
+        String initials;
+        String cpr = "";
+        String[] roles;
+
+        username = ui.getUserInput("Enter a username");
+        initials = ui.getUserInput("Enter initials");
+        while (!CprValidation.isCprValid(cpr))
+            cpr = ui.getUserInput("Enter CPR");
+        outputRoles();
+        roles = ui.getUserInput("Enter roles for user, separated by comma (,)").split(",");
+
+        return new User(-1, username, initials, Arrays.asList(roles), cpr);
+    }
+
+
+    // TODO: Should not be in this class. Just here for convinience while debugging.
+    private void outputRoles() {
+        String[] roles;
+        try {
+            roles = userAdm.getUserRoles();
+            System.out.print("|");
+            for (String role : roles) {
+                System.out.print(" " + role + " |");
+            }
+            System.out.println();
+        } catch (IUserAdministration.DataAccessException e) {
+
+        }
+
     }
 }

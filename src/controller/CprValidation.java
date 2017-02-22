@@ -10,6 +10,7 @@ import java.util.Date;
 public class CprValidation {
 
     public static boolean isCprValid(String cpr){
+        if (cpr.length() == 0) return false;
         String date = cpr.substring(0,6); //the first six digits of cpr
 
         if(cpr.length() == 10 && isDateValid(date)) {

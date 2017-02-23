@@ -3,6 +3,7 @@ package dal;
 import controller.UserValidator;
 import dto.User;
 
+import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -236,10 +237,24 @@ public class UserAdministrationDB implements IUserAdministration {
             sql += " password = '" + user.getPassword().toString() + "'";
         }
 
-        if (changeCount == 0) return; // No changes was made
-        sql += "WHERE id = " + user.getUserId();
+        if (changeCount != 0) {
+            sql += "WHERE id = " + user.getUserId();
+            dbConnection.update(sql);
+        }
 
-        dbConnection.update(sql);
+        if (!oldUser.getRoles().equals(user.getRoles())){
+            ArrayList<String> removedRoles = new ArrayList<>();
+            ArrayList<String> addedRoles = new ArrayList<>();
+
+            for(String role : oldUser.getRoles())
+                if (!user.getRoles().contains(role))
+                    removeRoleFromUser(user,role);
+
+            for(String role : user.getRoles())
+                if (!oldUser.getRoles().contains(role))
+                    addRoleToUser(user,role);
+        }
+
         dbConnection.close();
     }
 

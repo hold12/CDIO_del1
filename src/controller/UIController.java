@@ -3,13 +3,11 @@ package controller;
 import dal.IUserAdministration;
 import dal.UserAdministrationDB;
 import dto.User;
+import lang.Lang;
 import ui.UI;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import lang.Lang;
 
 /**
  * Created by freya on 14-02-2017.
@@ -83,7 +81,7 @@ public class UIController {
         String cpr = "";
         String[] roles;
 
-        while (!UserValidator.isUsernameValid(username)) username = ui.getUserInput(Lang.msg("enterUsername");
+        while (!UserValidator.isUsernameValid(username)) username = ui.getUserInput(Lang.msg("enterUsername"));
         while (!UserValidator.isInitialsValid(initials)) initials = ui.getUserInput(Lang.msg("enterInitials"));
         while (!UserValidator.isCprValid(cpr))
             cpr = ui.getUserInput(Lang.msg("enterCpr"));
@@ -190,7 +188,7 @@ public class UIController {
         try {
             roles = userAdm.getUserRoles();
         } catch (IUserAdministration.DataAccessException e) {
-            ui.printError("Could not fetch roles. " + e.getMessage());
+            ui.printError(Lang.msg("errorFetchRoles") + e.getMessage());
             return;
         }
 

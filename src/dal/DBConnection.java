@@ -55,8 +55,9 @@ public class DBConnection {
         if (!checkJDBCDriverExists()) return;
         if (!canConnectToServer()) return;
 
-        if (connection != null)
-            System.out.println("[DBConnection::open]: Connection established.");
+        if (connection != null) {
+//            System.out.println("[DBConnection::open]: Connection established.");
+        }
         else
             System.err.println("[DBConnection::open]: Failed to make a connection to the database server.");
     }
@@ -107,16 +108,28 @@ public class DBConnection {
         }
     }
 
+    public void setPreparedString(int index, String value) {
+        if (preparedStatement == null) return;
+        try {
+            preparedStatement.setString(index, value);
+        } catch (SQLException e) {
+            System.err.println("[DBConnection::setPreparedInt]: Unable to set int.");
+            e.printStackTrace();
+            return;
+        }
+    }
+
     public void prepareQuery(String querySQL) {
         try {
             open();
         } catch (ConnectionNeverClosedException e) {
-            System.out.println("[DBConnection::prepareQuery]: The database connection was never closed before this query was executed.");
+            System.err.println("[DBConnection::prepareQuery]: The database connection was never closed before this query was executed.");
             e.printStackTrace();
             return;
         }
 
-        if (connection != null) return;
+        if (connection != null) {
+            System.out.println(preparedStatement);return;}
 
         try {
             preparedStatement = connection.prepareStatement(querySQL);
@@ -131,25 +144,48 @@ public class DBConnection {
         try {
             return preparedStatement.executeQuery();
         } catch (SQLException e) {
-            System.err.println("[DBConnection::executePreparedQuery]: Unable to execute prepared query.");
+            System.err.println("[DBConnection::executePreparedUpdate]: Unable to execute prepared query.");
             e.printStackTrace();
             return null;
         }
     }
 
+    public void executePreparedUpdate() {
+        try {
+            if (preparedStatement == null) {
+                System.err.println("[DBConnection::executePreparedUpdate]: Prepared Statement is null!");
+                return;
+            }
+            preparedStatement.executeUpdate();
+//            return preparedStatement.executeQuery();
+        } catch (SQLException e) {
+            System.err.println("[DBConnection::executePreparedUpdate]: Unable to execute prepared query.");
+            e.printStackTrace();
+            return;
+        }
+    }
+
     public void update(String updateSQL) {
-//        open();
-//        if (connection == null) return;
-//
-//        statement = createStatement();
-//
-//        try {
-//            statement.executeUpdate(updateSQL);
-//        } catch(SQLException e) {
-//            System.err.println("[DBConnection::update]: Failed to insert/update record.");
-//            e.printStackTrace();
-//            return;
-//        }
+        try {
+            open();
+        } catch (ConnectionNeverClosedException e) {
+            System.err.print("[DBConnection::query]: " + e.getMessage());
+            e.printStackTrace();
+            return;
+        }
+
+        if (connection == null) return;
+
+        statement = createStatement();
+
+        ResultSet result;
+        try {
+            statement.executeUpdate(updateSQL);
+        } catch (SQLException e) {
+            System.err.print("[DBConnection::query]: " + e.getMessage());
+            e.printStackTrace();
+            return;
+        }
     }
 
     private Statement createStatement() {

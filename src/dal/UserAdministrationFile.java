@@ -11,7 +11,17 @@ public class UserAdministrationFile implements IUserAdministration {
     //TODO: Implement after implementation of UserAdministrationDB.
 
     @Override
+    public String[] getUserRoles() throws DataAccessException {
+        return new String[0];
+    }
+
+    @Override
     public User getUser(int userId) throws DataAccessException {
+        return null;
+    }
+
+    @Override
+    public User getUser(String username) throws DataAccessException {
         return null;
     }
 

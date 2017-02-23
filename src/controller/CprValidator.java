@@ -7,9 +7,10 @@ import java.util.Date;
 /**
  * Created by freya on 21-02-2017.
  */
-public class CprValidation {
+public class CprValidator {
 
     public static boolean isCprValid(String cpr){
+        if (cpr.length() != 10) return false;
         String date = cpr.substring(0,6); //the first six digits of cpr
 
         if(cpr.length() == 10 && isDateValid(date)) {

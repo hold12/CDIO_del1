@@ -1,5 +1,6 @@
 package dal;
 
+import controller.CprValidator;
 import dto.User;
 
 import java.sql.ResultSet;
@@ -19,21 +20,55 @@ public class UserAdministrationDB implements IUserAdministration {
 
     @Override
     public User getUser(int userId) throws DataAccessException {
-        User user = null;
-        dbConnection.prepareQuery("SELECT * FROM user WHERE id=?");
-        dbConnection.setPreparedInt(1, userId);
+        ResultSet resultSet = dbConnection.query("SELECT * FROM user WHERE id = " + userId + " LIMIT 1");
+        User user;
 
         try {
-            user = getUserFromResultSet(dbConnection.executePreparedQuery());
+            resultSet.next();
+            user = getUserFromResultSet(resultSet);
         } catch (SQLException e) {
-            user = null;
-            System.err.println("[UserAdministrationDB::getUser]: Could not get user.");
+            System.err.println("[]: Could not fetch user with id = " + userId);
             e.printStackTrace();
+            return null;
         } finally {
             dbConnection.close();
-            return user;
         }
+
+        return user;
     }
+
+    @Override
+    public User getUser(String username) throws DataAccessException {
+        User user;
+        final String sql = String.format("SELECT * FROM user WHERE username = '%s' LIMIT 1", username);
+        ResultSet resultSet = dbConnection.query(sql);
+        try {
+            resultSet.next();
+            user = getUserFromResultSet(resultSet);
+//            roleId = Integer.parseInt(resultSet.getString("id"));
+        } catch (SQLException e) {
+            System.err.println("[UserAdministrationDB::getUserRoles]: Could not fetch user.");
+            e.printStackTrace();
+            return null;
+        } finally {
+            dbConnection.close();
+        }
+        return user;
+    }
+
+//    public User getUser(String username) throws DataAccessException {
+//        String sql = String.format("SELECT * FROM user WHERE username = '%s' LIMIT 1", username);
+//        System.out.println(sql);
+//        User user;
+//
+//        ResultSet resultSet = dbConnection.query(sql);
+//        try {
+//            user = getUserFromResultSet(resultSet);
+//        } catch (SQLException e) {
+//            return null;
+//        }
+//        return user;
+//    }
 
     @Override
     public List<User> getUserList() throws DataAccessException {
@@ -60,19 +95,23 @@ public class UserAdministrationDB implements IUserAdministration {
 
         try {
             userId = Integer.parseInt(resultSet.getString("id")); // TODO: Make sure all fields are spelled correctly
-        } catch(Exception e) {
+        } catch (SQLException e) {
+            System.err.println("[UserAdministrationDB::getUserFromResultSet]: " + e.getMessage());
+            e.printStackTrace();
+        }
+        catch(Exception e) {
             System.err.println("Invalid datatype for user id.");
         }
 
         String userName    = resultSet.getString("username");
         String ini         = resultSet.getString("initials");
-        List<String> roles = getRoleFromUser(userId);
+        List<String> roles = getRolesFromUser(userId);
         String cpr         = resultSet.getString("cpr");
         String password    = resultSet.getString("password");
         return new User(userId, userName, ini, roles, cpr, password);
     }
 
-    private List<String> getRoleFromUser(int userId) {
+    private List<String> getRolesFromUser(int userId) {
         ResultSet resultSet = dbConnection.query("" +
                 "SELECT role_name FROM user " +
                 "JOIN user_role ON user_role.user_id = user.id " +
@@ -97,16 +136,120 @@ public class UserAdministrationDB implements IUserAdministration {
 
     @Override
     public void createUser(User user) throws DataAccessException {
+//        dbConnection.prepareQuery(
+//                "INSERT INTO user (username, initials, cpr, password) VALUES" +
+//                        "(?, ?, ?, ?)"
+//        );
+//        dbConnection.setPreparedString(0, user.getUserName());
+//        dbConnection.setPreparedString(1, user.getInitials());
+//        dbConnection.setPreparedString(2, user.getCpr());
+//        dbConnection.setPreparedString(3, new Password().getPassword());
+        String username = user.getUserName();
+        String initials = user.getInitials();
+        List<String> roles = user.getRoles();
+        String cpr = user.getCpr();
+        String password = user.getPassword().getPassword();
 
+        // Add User
+        String sql = String.format("INSERT INTO user (username,initials,cpr,password) " +
+                "VALUES ('%s','%s','%s','%s')", username, initials, cpr, password);
+//        System.out.println(sql);
+
+        if (!CprValidator.isCprValid(cpr)) throw new DataAccessException("[UserAdministrationDB::createUser]: CPR does not have correct format!");
+
+
+        dbConnection.update(sql);
+//        System.out.println("Inserting new user: " + user.getUserName());
+
+//        dbConnection.executePreparedUpdate();
+
+        dbConnection.close();
+
+        user = getUser(user.getUserName());
+
+        // Add User Roles
+        for (String role : roles)
+            addRoleToUser(user, role);
+
+    }
+
+    private void addRoleToUser(User user, String role) {
+        int userId = user.getUserId();
+        int roleId = getRoleId(role);
+
+        String sql = String.format("INSERT INTO user_role (user_id,role_id) " +
+                "VALUES (%d,%d)", userId, roleId);
+
+        dbConnection.update(sql);
+        dbConnection.close();
+    }
+
+    // TODO: Make this private
+    public int getRoleId(String roleName) {
+        int roleId;
+        ResultSet resultSet = dbConnection.query("SELECT id FROM role WHERE role_name = '" +  roleName + "' LIMIT 1");
+        try {
+            resultSet.next();
+            roleId = Integer.parseInt(resultSet.getString("id"));
+        } catch (SQLException e) {
+            System.err.println("[UserAdministrationDB::getUserRoles]: Could not fetch role id.");
+            e.printStackTrace();
+            return -1;
+        } finally {
+            dbConnection.close();
+        }
+        return roleId;
+    }
+
+    public String[] getUserRoles() throws DataAccessException {
+        List<String> userRoles = new ArrayList<>();
+        ResultSet resultSet = dbConnection.query("SELECT role_name FROM role");
+
+        try {
+            while (resultSet.next())
+                userRoles.add(resultSet.getString("role_name"));
+        } catch (SQLException e) {
+            System.err.println("[UserAdministrationDB::getUserRoles]: Could not fetch user roles.");
+            e.printStackTrace();
+            return null;
+        } finally {
+            dbConnection.close();
+        }
+
+        return userRoles.stream().toArray(String[]::new);
     }
 
     @Override
     public void updateUser(User user) throws DataAccessException {
+        final User oldUser = getUser(user.getUserId());
+        int changeCount = 0;
+        String sql  = "UPDATE user SET";
+        if (!oldUser.getUserName().equals(user.getUserName())) {// Username has been changed
+            if (changeCount > 0) sql += ", ";
+            changeCount++;
+            sql += " username =  '" + user.getUserName() + "'";
+        }
+        if (!oldUser.getInitials().equals(user.getInitials())) {// Initials has been changed
+            if (changeCount > 0) sql += ", ";
+            changeCount++;
+            sql += " initials = '" + user.getInitials() + "'";
+        }
+        if (!oldUser.getPassword().getPassword().equals(user.getPassword().getPassword())) {// TODO: Make equals method in password instead
+            if (changeCount > 0) sql += ", ";
+            changeCount++;
+            sql += " password = '" + user.getPassword().getPassword() + "'";
+        }
+        if (changeCount == 0) return; // No changes was made
+        sql += "WHERE id = " + user.getUserId();
 
+        dbConnection.update(sql);
+        dbConnection.close();
     }
 
     @Override
     public void deleteUser(int userId) throws DataAccessException {
-
+        String sql = String.format("DELETE FROM user WHERE id = %d", userId);
+        dbConnection.update(sql);
+        dbConnection.close();
     }
 }

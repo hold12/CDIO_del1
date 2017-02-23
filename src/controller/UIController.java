@@ -121,6 +121,7 @@ public class UIController {
                 Lang.msg("generateNewPassword"),
                 /*Lang.msg("addRoles"),*/
                 /*Lang.msg("removeRoles"),*/
+                Lang.msg("cancel"), // TODO: Add Cancel
                 Lang.msg("finishEditing")
         };
 
@@ -135,6 +136,9 @@ public class UIController {
                 changeInitials(user);
             if (newUserChoice.equals(menuOptions[2])) // Generate New Password
                 user.generateNewPassword();
+            if (newUserChoice.equals(menuOptions[menuOptions.length - 2])) {
+                break;
+            }
             if (newUserChoice.equals(menuOptions[menuOptions.length - 1])) {
                 try {
                     userAdm.updateUser(user);
@@ -150,14 +154,20 @@ public class UIController {
 
     private void changeUsername(User user) {
         ui.printMsg(Lang.msg("currentUsername") + " = " + user.getUserName());
-        String newUsername = ui.getUserInput(Lang.msg("enterUsername"));
+        String newUsername = "";
+
+        while (!UserValidator.isUsernameValid(newUsername))
+            newUsername = ui.getUserInput(Lang.msg("enterUsername"));
         user.setUserName(newUsername);
         ui.printMsg(Lang.msg("usernameChangedTo") + ": " + user.getUserName());
     }
 
     private void changeInitials(User user) {
         ui.printMsg(Lang.msg("currentInitials") + " = " + user.getInitials());
-        String newInitials = ui.getUserInput(Lang.msg("enterInitials"));
+        String newInitials = "";
+
+        while (!UserValidator.isInitialsValid(newInitials))
+            newInitials = ui.getUserInput(Lang.msg("enterInitials"));
         user.setInitials(newInitials);
         ui.printMsg(Lang.msg("initialsChangedTo") + ": " + user.getInitials());
     }

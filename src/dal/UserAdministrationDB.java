@@ -1,6 +1,6 @@
 package dal;
 
-import controller.CprValidation;
+import controller.CprValidator;
 import dto.User;
 
 import java.sql.ResultSet;
@@ -153,12 +153,13 @@ public class UserAdministrationDB implements IUserAdministration {
         // Add User
         String sql = String.format("INSERT INTO user (username,initials,cpr,password) " +
                 "VALUES ('%s','%s','%s','%s')", username, initials, cpr, password);
-        System.out.println(sql);
+//        System.out.println(sql);
 
-        if (!CprValidation.isCprValid(cpr)) throw new DataAccessException("[UserAdministrationDB::createUser]: CPR does not have correct format!");
+        if (!CprValidator.isCprValid(cpr)) throw new DataAccessException("[UserAdministrationDB::createUser]: CPR does not have correct format!");
+
 
         dbConnection.update(sql);
-        System.out.println("Inserting new user: " + user.getUserName());
+//        System.out.println("Inserting new user: " + user.getUserName());
 
 //        dbConnection.executePreparedUpdate();
 

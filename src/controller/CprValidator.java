@@ -7,7 +7,7 @@ import java.util.Date;
 /**
  * Created by freya on 21-02-2017.
  */
-public class CprValidation {
+public class CprValidator {
 
     public static boolean isCprValid(String cpr){
         if (cpr.length() == 0) return false;

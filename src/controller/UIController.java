@@ -81,7 +81,7 @@ public class UIController {
 
         username = ui.getUserInput("Enter a username");
         initials = ui.getUserInput("Enter initials");
-        while (!CprValidation.isCprValid(cpr))
+        while (!CprValidator.isCprValid(cpr))
             cpr = ui.getUserInput("Enter CPR");
         outputRoles();
         roles = ui.getUserInput("Enter roles for user, separated by comma (,)").split(",");

@@ -24,8 +24,8 @@ public class Lang {
 
     public static void setLanguage(String[] args) {
         if (args.length != 2) {
-            lang = "da";
-            country = "DK";
+            lang = "en";
+            country = "US";
         } else if (args.length == 2){
             lang = args[0];
             country = args[1];

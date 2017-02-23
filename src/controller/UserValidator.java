@@ -7,8 +7,7 @@ import java.util.Date;
 /**
  * Created by freya on 21-02-2017.
  */
-public class CprValidator {
-
+public class UserValidator {
     public static boolean isCprValid(String cpr){
         if (cpr.length() != 10) return false;
         String date = cpr.substring(0,6); //the first six digits of cpr
@@ -34,4 +33,7 @@ public class CprValidator {
         }
     }
 
+    public static boolean isInitialsValid(String initials) {
+        return initials.length() <= 4 && initials.length() >= 2;
+    }
 }

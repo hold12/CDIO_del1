@@ -1,6 +1,6 @@
 package dal;
 
-import controller.CprValidator;
+import controller.UserValidator;
 import dto.User;
 
 import java.sql.ResultSet;
@@ -136,14 +136,6 @@ public class UserAdministrationDB implements IUserAdministration {
 
     @Override
     public void createUser(User user) throws DataAccessException {
-//        dbConnection.prepareQuery(
-//                "INSERT INTO user (username, initials, cpr, password) VALUES" +
-//                        "(?, ?, ?, ?)"
-//        );
-//        dbConnection.setPreparedString(0, user.getUserName());
-//        dbConnection.setPreparedString(1, user.getInitials());
-//        dbConnection.setPreparedString(2, user.getCpr());
-//        dbConnection.setPreparedString(3, new Password().getPassword());
         String username = user.getUserName();
         String initials = user.getInitials();
         List<String> roles = user.getRoles();
@@ -153,24 +145,20 @@ public class UserAdministrationDB implements IUserAdministration {
         // Add User
         String sql = String.format("INSERT INTO user (username,initials,cpr,password) " +
                 "VALUES ('%s','%s','%s','%s')", username, initials, cpr, password);
-//        System.out.println(sql);
 
-        if (!CprValidator.isCprValid(cpr)) throw new DataAccessException("[UserAdministrationDB::createUser]: CPR does not have correct format!");
+        if (!UserValidator.isCprValid(cpr)) throw new DataAccessException("[UserAdministrationDB::createUser]: CPR does not have correct format!");
+        if (!UserValidator.isInitialsValid(initials)) throw new DataAccessException("[UserAdministrationDB::createUser]: Initials are either too long or too short (must be between 2 and 4 characters)");
 
-
+        // Insert user (no roles)
         dbConnection.update(sql);
-//        System.out.println("Inserting new user: " + user.getUserName());
-
-//        dbConnection.executePreparedUpdate();
-
         dbConnection.close();
 
+        // Get user id
         user = getUser(user.getUserName());
 
-        // Add User Roles
+        // Add user's roles
         for (String role : roles)
             addRoleToUser(user, role);
-
     }
 
     private void addRoleToUser(User user, String role) {

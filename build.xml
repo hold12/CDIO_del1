@@ -10,6 +10,7 @@
   <path id="classpath.test">
     <pathelement location="lib/junit-4.12.jar" />
     <pathelement location="lib/hamcrest-core-1.3.jar" />
+    <pathelement location="lib/mysql-connector-java-5.1.40-bin.jar" />
     <pathelement location="${main.build.dir}"/>
     <path refid="classpath.base" />
   </path>

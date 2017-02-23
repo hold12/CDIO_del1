@@ -93,6 +93,8 @@ public class UIController {
         } catch (IUserAdministration.DataAccessException e) {
             ui.printError(Lang.msg("errorCreateUser") + "\n" + e.getMessage());
             return;
+        } catch (IUserAdministration.DataValidationException e) {
+            ui.printError(Lang.msg("errorCprExists") + "\n" + e.getMessage());
         }
     }
 

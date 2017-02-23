@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import lang.Lang;
+
 /**
  * Created by freya on 14-02-2017.
  */
@@ -28,7 +30,7 @@ public class UIController {
     public void mainMenu() {
         while (true) {
             final String[] menuOptions = {
-                    "Create User",
+                    Lang.msg("createUsers"),
                     "Show Users",
                     "Edit User",
                     "Delete User",

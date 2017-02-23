@@ -36,4 +36,14 @@ public class UserValidator {
     public static boolean isInitialsValid(String initials) {
         return initials.length() <= 4 && initials.length() >= 2;
     }
+
+    public static boolean isUsernameValid(String username) {
+        try {
+            Integer.parseInt(username);
+            // Fail if this has success. There shall be at least 1 non-numeric character.
+            return false;
+        } catch (Exception e) {
+            return username.length() <= 20 && username.length() >= 2;
+        }
+    }
 }

@@ -1,8 +1,10 @@
 package dal;
 
+import com.sun.xml.internal.rngom.binary.DataExceptPattern;
 import controller.UserValidator;
 import dto.User;
 
+import javax.xml.crypto.Data;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -146,6 +148,7 @@ public class UserAdministrationDB implements IUserAdministration {
         String sql = String.format("INSERT INTO user (username,initials,cpr,password) " +
                 "VALUES ('%s','%s','%s','%s')", username, initials, cpr, password);
 
+        if (!UserValidator.isUsernameValid(username)) throw new DataAccessException("[UserAdministrationDB::createUser]: Username is invalid. Username must be between 2 and 20 characters, and there must be at least 1 non-numeric character.");
         if (!UserValidator.isCprValid(cpr)) throw new DataAccessException("[UserAdministrationDB::createUser]: CPR does not have correct format!");
         if (!UserValidator.isInitialsValid(initials)) throw new DataAccessException("[UserAdministrationDB::createUser]: Initials are either too long or too short (must be between 2 and 4 characters)");
 

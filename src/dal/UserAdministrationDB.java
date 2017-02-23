@@ -1,10 +1,8 @@
 package dal;
 
-import com.sun.xml.internal.rngom.binary.DataExceptPattern;
 import controller.UserValidator;
 import dto.User;
 
-import javax.xml.crypto.Data;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;

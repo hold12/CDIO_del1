@@ -92,7 +92,6 @@ public class UIController {
             userAdm.createUser(new User(-1, username, initials, Arrays.asList(roles), cpr));
         } catch (IUserAdministration.DataAccessException e) {
             ui.printError("An error occurred while creating a user. " + e.getMessage());
-//            e.printStackTrace();
             return;
         }
     }
@@ -107,7 +106,6 @@ public class UIController {
                 userAdm.deleteUser(user.getUserId());
             } catch (IUserAdministration.DataAccessException e) {
                 ui.printError("Could not delete user. " + e.getMessage());
-//                e.printStackTrace();
                 return;
             }
         }
@@ -143,7 +141,6 @@ public class UIController {
                     userAdm.updateUser(user);
                 } catch (IUserAdministration.DataAccessException e) {
                     ui.printError("An error occurred while editing a user. " + e.getMessage());
-//                    e.printStackTrace();
                     return;
                 }
                 break;
@@ -167,7 +164,6 @@ public class UIController {
     }
 
     private User getUser() {
-        User user;
         int userId = -1;
         String input;
         try {
@@ -188,8 +184,6 @@ public class UIController {
         }
     }
 
-
-    // TODO: Should not be in this class. Just here for convinience while debugging.
     private void outputRoles() {
         String[] roles;
         try {

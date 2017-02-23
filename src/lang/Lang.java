@@ -15,18 +15,19 @@ import java.util.ResourceBundle;
 public class Lang {
     private static String lang;
     private static String country;
-    @SuppressWarnings("FieldCanBeLocal")
-    private static Locale locale;
 
     private static ResourceBundle resourceBundle;
 
-    public static String msg(String message) { return resourceBundle.getString(message); }
+    public static String msg(String message) {
+        return resourceBundle.getString(message);
+    }
 
     public static void setLanguage(String[] args) {
+        Locale locale;
         if (args.length != 2) {
             lang = "en";
             country = "US";
-        } else if (args.length == 2){
+        } else if (args.length == 2) {
             lang = args[0];
             country = args[1];
         } else {
@@ -34,13 +35,10 @@ public class Lang {
             System.out.println("Usage: java -jar <app_name>.jar <language> <country>");
         }
 
-        try
-        {
+        try {
             locale = new Locale(lang, country);
             resourceBundle = ResourceBundle.getBundle("lang", locale);
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             System.err.println("You either specified some wrong arguments or you specified a language that doesn't exist in this game.");
             System.err.println("Usage: java -jar game.jar <language> <country> (ex. da DK)");
         }

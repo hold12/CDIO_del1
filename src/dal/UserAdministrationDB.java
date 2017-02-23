@@ -3,7 +3,6 @@ package dal;
 import controller.UserValidator;
 import dto.User;
 
-import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -62,10 +61,10 @@ public class UserAdministrationDB implements IUserAdministration {
         ResultSet resultSet = dbConnection.query("SELECT * FROM user");
 
         try {
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 users.add(getUserFromResultSet(resultSet));
             }
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             System.err.println("[UserAdministrationDB]: An error occured when trying to fetch all users from the database.");
             e.printStackTrace();
             return null;
@@ -80,20 +79,19 @@ public class UserAdministrationDB implements IUserAdministration {
         int userId = 0;
 
         try {
-            userId = Integer.parseInt(resultSet.getString("id")); // TODO: Make sure all fields are spelled correctly
+            userId = Integer.parseInt(resultSet.getString("id"));
         } catch (SQLException e) {
             System.err.println("[UserAdministrationDB::getUserFromResultSet]: " + e.getMessage());
             e.printStackTrace();
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             System.err.println("Invalid datatype for user id.");
         }
 
-        String userName    = resultSet.getString("username");
-        String ini         = resultSet.getString("initials");
+        String userName = resultSet.getString("username");
+        String ini = resultSet.getString("initials");
         List<String> roles = getRolesFromUser(userId);
-        String cpr         = resultSet.getString("cpr");
-        String password    = resultSet.getString("password");
+        String cpr = resultSet.getString("cpr");
+        String password = resultSet.getString("password");
         return new User(userId, userName, ini, roles, cpr, password);
     }
 
@@ -160,7 +158,7 @@ public class UserAdministrationDB implements IUserAdministration {
             addRoleToUser(user, role);
     }
 
-    public void addRoleToUser(User user, String role) {
+    private void addRoleToUser(User user, String role) {
         int userId = user.getUserId();
         int roleId = getRoleId(role);
 
@@ -171,7 +169,7 @@ public class UserAdministrationDB implements IUserAdministration {
         dbConnection.close();
     }
 
-    public void removeRoleFromUser(User user, String role) {
+    private void removeRoleFromUser(User user, String role) {
         int userId = user.getUserId();
         int roleId = getRoleId(role);
 
@@ -181,10 +179,9 @@ public class UserAdministrationDB implements IUserAdministration {
         dbConnection.close();
     }
 
-    // TODO: Make this private
-    public int getRoleId(String roleName) {
+    private int getRoleId(String roleName) {
         int roleId;
-        ResultSet resultSet = dbConnection.query("SELECT id FROM role WHERE role_name = '" +  roleName + "' LIMIT 1");
+        ResultSet resultSet = dbConnection.query("SELECT id FROM role WHERE role_name = '" + roleName + "' LIMIT 1");
         try {
             resultSet.next();
             roleId = Integer.parseInt(resultSet.getString("id"));
@@ -220,7 +217,7 @@ public class UserAdministrationDB implements IUserAdministration {
     public void updateUser(User user) throws DataAccessException {
         final User oldUser = getUser(user.getUserId());
         int changeCount = 0;
-        String sql  = "UPDATE user SET";
+        String sql = "UPDATE user SET";
         if (!oldUser.getUserName().equals(user.getUserName())) {// Username has been changed
             if (changeCount > 0) sql += ", ";
             changeCount++;
@@ -242,17 +239,14 @@ public class UserAdministrationDB implements IUserAdministration {
             dbConnection.update(sql);
         }
 
-        if (!oldUser.getRoles().equals(user.getRoles())){
-            ArrayList<String> removedRoles = new ArrayList<>();
-            ArrayList<String> addedRoles = new ArrayList<>();
-
-            for(String role : oldUser.getRoles())
+        if (!oldUser.getRoles().equals(user.getRoles())) {
+            for (String role : oldUser.getRoles())
                 if (!user.getRoles().contains(role))
-                    removeRoleFromUser(user,role);
+                    removeRoleFromUser(user, role);
 
-            for(String role : user.getRoles())
+            for (String role : user.getRoles())
                 if (!oldUser.getRoles().contains(role))
-                    addRoleToUser(user,role);
+                    addRoleToUser(user, role);
         }
 
         dbConnection.close();

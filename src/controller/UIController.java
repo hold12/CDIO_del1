@@ -92,7 +92,6 @@ public class UIController {
             userAdm.createUser(new User(-1, username, initials, Arrays.asList(roles), cpr));
         } catch (IUserAdministration.DataAccessException e) {
             ui.printError(Lang.msg("errorCreateUser") + "\n" + e.getMessage());
-            return;
         } catch (IUserAdministration.DataValidationException e) {
             ui.printError(Lang.msg("errorCprExists") + "\n" + e.getMessage());
         }
@@ -108,7 +107,6 @@ public class UIController {
                 userAdm.deleteUser(user.getUserId());
             } catch (IUserAdministration.DataAccessException e) {
                 ui.printError(Lang.msg("errorDeleteUser") + "\n" + e.getMessage());
-                return;
             }
         }
     }
@@ -207,7 +205,6 @@ public class UIController {
 
         if (user.getRoles().size() == 0) {
             currentRolesMsg += Lang.msg("none");
-            return;
         }
 
         for (int i = 0; i < user.getRoles().size(); i++) {
@@ -236,7 +233,8 @@ public class UIController {
                 if (userId > 99 || userId < 11) {
                     return userAdm.getUser(input);
                 }
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
             if (userId != -1)
                 return userAdm.getUser(userId);
             else

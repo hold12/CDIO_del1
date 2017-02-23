@@ -7,6 +7,7 @@ import java.util.List;
 /**
  * Created by freya on 14-02-2017.
  */
+@SuppressWarnings("ALL")
 public class UserAdministrationFile implements IUserAdministration {
     //TODO: Implement after implementation of UserAdministrationDB.
 

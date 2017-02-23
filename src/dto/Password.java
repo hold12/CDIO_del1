@@ -8,22 +8,23 @@ import java.util.Random;
  * http://theopentutorials.com/tutorials/java/util/generating-a-random-password-with-restriction-in-java/
  */
 public class Password {
-    private final String ALPHA_CAPS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    private final String ALPHA = "abcdefghijklmnopqrstuvwxyz";
-    private final String NUM = "0123456789";
-    private final String SPECIAL_CHARS = ".-_+!?=";
     private String password;
 
     public Password() {
         this.password = new String(generatePassword(8, 20, 1, 1, 1));
     }
 
-    public Password(String password){
+    public Password(String password) {
         this.password = password;
     }
 
     private char[] generatePassword(int minLen, int maxLen, int noOfCAPSAlpha,
                                     int noOfDigits, int noOfSplChars) {
+        final String ALPHA_CAPS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        final String ALPHA = "abcdefghijklmnopqrstuvwxyz";
+        final String NUM = "0123456789";
+        final String SPECIAL_CHARS = ".-_+!?=";
+
         if (minLen > maxLen)
             throw new IllegalArgumentException("Min. Length > Max. Length!");
         if ((noOfCAPSAlpha + noOfDigits + noOfSplChars) > minLen)

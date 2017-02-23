@@ -125,7 +125,7 @@ public class UserAdministrationDB implements IUserAdministration {
         String initials = user.getInitials();
         List<String> roles = user.getRoles();
         String cpr = user.getCpr();
-        String password = user.getPassword().getPassword();
+        String password = user.getPassword().toString();
 
         // Add User
         String sql = String.format("INSERT INTO user (username,initials,cpr,password) " +
@@ -208,10 +208,10 @@ public class UserAdministrationDB implements IUserAdministration {
             changeCount++;
             sql += " initials = '" + user.getInitials() + "'";
         }
-        if (!oldUser.getPassword().getPassword().equals(user.getPassword().getPassword())) {// TODO: Make equals method in password instead
+        if (!oldUser.getPassword().equals(user.getPassword())) {
             if (changeCount > 0) sql += ", ";
             changeCount++;
-            sql += " password = '" + user.getPassword().getPassword() + "'";
+            sql += " password = '" + user.getPassword().toString() + "'";
         }
         if (changeCount == 0) return; // No changes was made
         sql += "WHERE id = " + user.getUserId();

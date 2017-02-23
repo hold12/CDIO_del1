@@ -120,7 +120,7 @@ public class UserAdministrationDB implements IUserAdministration {
 
 
     @Override
-    public void createUser(User user) throws DataAccessException {
+    public void createUser(User user) throws DataAccessException, DataValidationException {
         String username = user.getUserName();
         String initials = user.getInitials();
         List<String> roles = user.getRoles();
@@ -131,10 +131,22 @@ public class UserAdministrationDB implements IUserAdministration {
         String sql = String.format("INSERT INTO user (username,initials,cpr,password) " +
                 "VALUES ('%s','%s','%s','%s')", username, initials, cpr, password);
 
-        if (!UserValidator.isUsernameValid(username)) throw new DataAccessException("[UserAdministrationDB::createUser]: Username is invalid. Username must be between 2 and 20 characters, and there must be at least 1 non-numeric character.");
-        if (!UserValidator.isCprValid(cpr)) throw new DataAccessException("[UserAdministrationDB::createUser]: CPR does not have correct format!");
-        if (!UserValidator.isInitialsValid(initials)) throw new DataAccessException("[UserAdministrationDB::createUser]: Initials are either too long or too short (must be between 2 and 4 characters)");
+        if (!UserValidator.isUsernameValid(username))
+            throw new DataValidationException("[UserAdministrationDB::createUser]: Username is invalid. Username must be between 2 and 20 characters, and there must be at least 1 non-numeric character.");
+        if (!UserValidator.isCprValid(cpr))
+            throw new DataValidationException("[UserAdministrationDB::createUser]: CPR does not have correct format!");
+        if (!UserValidator.isInitialsValid(initials))
+            throw new DataValidationException("[UserAdministrationDB::createUser]: Initials are either too long or too short (must be between 2 and 4 characters)");
 
+        // Search for similar CPR
+        String cprSearch = String.format("SELECT id FROM user WHERE cpr = '%s'", cpr);
+        try {
+            if (dbConnection.query(cprSearch).next()) {
+                throw new DataValidationException("[UserAdministrationDB::createUser]: Cpr already exists in database.");
+            }
+        } catch (SQLException e) {
+            throw new DataAccessException("[UserAdministrationDB::createUser]: An error occured while searching for CPR");
+        }
         // Insert user (no roles)
         dbConnection.update(sql);
         dbConnection.close();

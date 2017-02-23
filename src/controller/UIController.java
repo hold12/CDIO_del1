@@ -62,7 +62,7 @@ public class UIController {
     }
 
     private void listUsers() {
-        List<User> users = new ArrayList<>();
+        List<User> users;
         try {
             users = userAdm.getUserList();
         } catch (IUserAdministration.DataAccessException e) {

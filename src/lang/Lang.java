@@ -1,6 +1,6 @@
 package lang;/*
            ,                                             |
-          /#\         _         _     _    ___   ___     | Made by hold 11 - 2016
+          /#\         _         _     _    ___   ___     | Made by hold 11
          /###\       | |__   _ | | __| |  /_  | /_  |    | Version: v0.1.1
         /#####\      | '_ \ / \| |/ _  |    | |   | |    |
        /##,-,##\     | | | | O | | ( | |   _| |_ _| |_   | Anders Wiberg Olsen (s165241), Valentin Leon Christensen (s152735),

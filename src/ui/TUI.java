@@ -45,6 +45,11 @@ public class TUI implements UI
     }
 
     @Override
+    public void printError(String message) {
+        System.err.println(message);
+    }
+
+    @Override
     public String getUserInput(String message)
     {
         System.out.print(message + ": ");
@@ -59,6 +64,8 @@ public class TUI implements UI
         }
         System.out.println();
     }
+
+
 
     //    private String createNumberedList(String[] list)
 //    {

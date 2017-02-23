@@ -97,74 +97,6 @@ public class DBConnection {
         return result;
     }
 
-    public void setPreparedInt(int index, int value) {
-        if (preparedStatement == null) return;
-        try {
-            preparedStatement.setInt(index, value);
-        } catch (SQLException e) {
-            System.err.println("[DBConnection::setPreparedInt]: Unable to set int.");
-            e.printStackTrace();
-            return;
-        }
-    }
-
-    public void setPreparedString(int index, String value) {
-        if (preparedStatement == null) return;
-        try {
-            preparedStatement.setString(index, value);
-        } catch (SQLException e) {
-            System.err.println("[DBConnection::setPreparedInt]: Unable to set int.");
-            e.printStackTrace();
-            return;
-        }
-    }
-
-    public void prepareQuery(String querySQL) {
-        try {
-            open();
-        } catch (ConnectionNeverClosedException e) {
-            System.err.println("[DBConnection::prepareQuery]: The database connection was never closed before this query was executed.");
-            e.printStackTrace();
-            return;
-        }
-
-        if (connection != null) {
-            System.out.println(preparedStatement);return;}
-
-        try {
-            preparedStatement = connection.prepareStatement(querySQL);
-        } catch (SQLException e) {
-            System.err.println("[DBConnection::prepareQuery]: Unable to prepare the prepared statement.");
-            e.printStackTrace();
-            return;
-        }
-    }
-
-    public ResultSet executePreparedQuery() {
-        try {
-            return preparedStatement.executeQuery();
-        } catch (SQLException e) {
-            System.err.println("[DBConnection::executePreparedUpdate]: Unable to execute prepared query.");
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public void executePreparedUpdate() {
-        try {
-            if (preparedStatement == null) {
-                System.err.println("[DBConnection::executePreparedUpdate]: Prepared Statement is null!");
-                return;
-            }
-            preparedStatement.executeUpdate();
-//            return preparedStatement.executeQuery();
-        } catch (SQLException e) {
-            System.err.println("[DBConnection::executePreparedUpdate]: Unable to execute prepared query.");
-            e.printStackTrace();
-            return;
-        }
-    }
-
     public void update(String updateSQL) {
         try {
             open();
@@ -201,7 +133,6 @@ public class DBConnection {
     }
 
     class ConnectionNeverClosedException extends Exception {
-        public ConnectionNeverClosedException() {}
         public ConnectionNeverClosedException(String message) { super(message); }
     }
 }

@@ -8,5 +8,6 @@ public interface UI
     String getMenuChoice(String... menuOptions);
     String getUserInput(String message);
     void printMsg(String message);
+    void printError(String message);
     void showRoles(String[] roles);
 }

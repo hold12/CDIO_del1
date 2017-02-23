@@ -89,8 +89,8 @@ public class UIController {
         try {
             userAdm.createUser(new User(-1, username, initials, Arrays.asList(roles), cpr));
         } catch (IUserAdministration.DataAccessException e) {
-            System.err.println(e.getMessage());
-            e.printStackTrace();
+            ui.printError("An error occurred while creating a user. " + e.getMessage());
+//            e.printStackTrace();
             return;
         }
     }
@@ -104,8 +104,8 @@ public class UIController {
             try {
                 userAdm.deleteUser(user.getUserId());
             } catch (IUserAdministration.DataAccessException e) {
-                System.err.println(e.getMessage());
-                e.printStackTrace();
+                ui.printError("Could not delete user. " + e.getMessage());
+//                e.printStackTrace();
                 return;
             }
         }
@@ -140,8 +140,8 @@ public class UIController {
                 try {
                     userAdm.updateUser(user);
                 } catch (IUserAdministration.DataAccessException e) {
-                    System.err.println(e.getMessage());
-                    e.printStackTrace();
+                    ui.printError("An error occurred while editing a user. " + e.getMessage());
+//                    e.printStackTrace();
                     return;
                 }
                 break;
@@ -181,8 +181,7 @@ public class UIController {
             else
                 return userAdm.getUser(input);
         } catch (IUserAdministration.DataAccessException e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
+            ui.printError("Could not find user. " + e.getMessage());
             return null;
         }
     }
@@ -194,7 +193,7 @@ public class UIController {
         try {
             roles = userAdm.getUserRoles();
         } catch (IUserAdministration.DataAccessException e) {
-            // TODO: Add catch
+            ui.printError("Could not fetch roles. " + e.getMessage());
             return;
         }
 

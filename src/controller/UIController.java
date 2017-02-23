@@ -221,7 +221,7 @@ public class UIController {
         selectedRoles = UserValidator.ensureRoles(user, selectedRoles);
 
         for (String role : selectedRoles)
-            userAdm.removeRoleFromUser(
+            userAdm.removeRoleFromUser(user, role);
     }
 
     private User getUser() {

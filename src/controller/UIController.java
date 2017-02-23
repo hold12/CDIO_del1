@@ -49,6 +49,10 @@ public class UIController {
             else if (userChoice.equals(menuOptions[2])) {
                 editUser();
             }
+            // Delete User
+            else if (userChoice.equals(menuOptions[3])) {
+                deleteUser();
+            }
             // Exit
             else if (userChoice.equals(menuOptions[menuOptions.length - 1]))
                 return;
@@ -88,6 +92,22 @@ public class UIController {
             System.err.println(e.getMessage());
             e.printStackTrace();
             return;
+        }
+    }
+
+    private void deleteUser() {
+        final User user = getUser();
+        ui.printMsg("Selected user: " + user.toString());
+
+        String verfication = ui.getUserInput("Are you sure? (Y/n)");
+        if (verfication.toLowerCase().equals("y") || verfication.equals("")) {
+            try {
+                userAdm.deleteUser(user.getUserId());
+            } catch (IUserAdministration.DataAccessException e) {
+                System.err.println(e.getMessage());
+                e.printStackTrace();
+                return;
+            }
         }
     }
 
@@ -152,6 +172,9 @@ public class UIController {
             input = ui.getUserInput("Select a user by name or id");
             try {
                 userId = Integer.parseInt(input);
+                if (userId > 99 || userId < 11) {
+                    return userAdm.getUser(input);
+                }
             } catch (Exception e) {}
             if (userId != -1)
                 return userAdm.getUser(userId);

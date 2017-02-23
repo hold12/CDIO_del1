@@ -247,6 +247,8 @@ public class UserAdministrationDB implements IUserAdministration {
 
     @Override
     public void deleteUser(int userId) throws DataAccessException {
-
+        String sql = String.format("DELETE FROM user WHERE id = %d", userId);
+        dbConnection.update(sql);
+        dbConnection.close();
     }
 }

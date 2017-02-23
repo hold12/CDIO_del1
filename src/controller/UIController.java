@@ -3,13 +3,12 @@ package controller;
 import dal.IUserAdministration;
 import dal.UserAdministrationDB;
 import dto.User;
+import lang.Lang;
 import ui.UI;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import lang.Lang;
 
 /**
  * Created by freya on 14-02-2017.
@@ -30,11 +29,11 @@ public class UIController {
     public void mainMenu() {
         while (true) {
             final String[] menuOptions = {
-                    Lang.msg("createUsers"),
-                    "Show Users",
-                    "Edit User",
-                    "Delete User",
-                    "Exit Program"
+                    Lang.msg("createUser"),
+                    Lang.msg("showUsers"),
+                    Lang.msg("editUser"),
+                    Lang.msg("deleteUser"),
+                    Lang.msg("exitProgram")
             };
 
             final String userChoice = ui.getMenuChoice(menuOptions);
@@ -73,6 +72,8 @@ public class UIController {
 
         for (User user : users)
             ui.printMsg(user.toString());
+
+        ui.printMsg("");
     }
 
     private void createUser() {
@@ -81,17 +82,17 @@ public class UIController {
         String cpr = "";
         String[] roles;
 
-        username = ui.getUserInput("Enter a username");
-        initials = ui.getUserInput("Enter initials");
+        username = ui.getUserInput(Lang.msg("enterUsername"));
+        initials = ui.getUserInput(Lang.msg("enterInitials"));
         while (!CprValidator.isCprValid(cpr))
-            cpr = ui.getUserInput("Enter CPR");
+            cpr = ui.getUserInput(Lang.msg("enterCpr"));
         outputRoles();
-        roles = ui.getUserInput("Enter roles for user, separated by comma (,)").split(",");
+        roles = ui.getUserInput(Lang.msg("enterRoles")).split(",");
 
         try {
             userAdm.createUser(new User(-1, username, initials, Arrays.asList(roles), cpr));
         } catch (IUserAdministration.DataAccessException e) {
-            ui.printError("An error occurred while creating a user. " + e.getMessage());
+            ui.printError(Lang.msg("errorCreateUser") + "\n" + e.getMessage());
 //            e.printStackTrace();
             return;
         }
@@ -99,14 +100,14 @@ public class UIController {
 
     private void deleteUser() {
         final User user = getUser();
-        ui.printMsg("Selected user: " + user.toString());
+        ui.printMsg(Lang.msg("selectedUser") + ": " + user.toString());
 
-        String verfication = ui.getUserInput("Are you sure? (Y/n)");
-        if (verfication.toLowerCase().equals("y") || verfication.equals("")) {
+        String verification = ui.getUserInput(Lang.msg("confirmation"));
+        if (verification.toLowerCase().equals(Lang.msg("yes")) || verification.equals("")) {
             try {
                 userAdm.deleteUser(user.getUserId());
             } catch (IUserAdministration.DataAccessException e) {
-                ui.printError("Could not delete user. " + e.getMessage());
+                ui.printError(Lang.msg("errorDeleteUser") + "\n" + e.getMessage());
 //                e.printStackTrace();
                 return;
             }
@@ -114,20 +115,19 @@ public class UIController {
     }
 
     private void editUser() {
-        ui.printMsg("What user do you want to edit?");
+        ui.printMsg(Lang.msg("chooseUserToEdit"));
 
         final User user = getUser();
         final String[] menuOptions = {
-                "Change Username",
-                "Change Initials",
-                "Generate New Password",
-                /*"Add Roles",*/
-                /*"Remove Roles",*/
-                /*"Change CPR"*/
-                "Finish Editing"
+                Lang.msg("changeUsername"),
+                Lang.msg("changeInitials"),
+                Lang.msg("generateNewPassword"),
+                /*Lang.msg("addRoles"),*/
+                /*Lang.msg("removeRoles"),*/
+                Lang.msg("finishEditing")
         };
 
-        ui.printMsg("Changing user: " + user.toString());
+        ui.printMsg(Lang.msg("selectedUser") + ": " + user.toString());
 
         while (true) {
             String newUserChoice = ui.getMenuChoice(menuOptions);
@@ -142,7 +142,7 @@ public class UIController {
                 try {
                     userAdm.updateUser(user);
                 } catch (IUserAdministration.DataAccessException e) {
-                    ui.printError("An error occurred while editing a user. " + e.getMessage());
+                    ui.printError(Lang.msg("errorEditUser") + "\n" + e.getMessage());
 //                    e.printStackTrace();
                     return;
                 }
@@ -153,17 +153,17 @@ public class UIController {
     }
 
     private void changeUsername(User user) {
-        ui.printMsg("Current username = " + user.getUserName());
-        String newUsername = ui.getUserInput("Type a new username");
+        ui.printMsg(Lang.msg("currentUsername") + " = " + user.getUserName());
+        String newUsername = ui.getUserInput(Lang.msg("enterUsername"));
         user.setUserName(newUsername);
-        ui.printMsg("Change username to " + user.getUserName());
+        ui.printMsg(Lang.msg("usernameChangedTo") + ": " + user.getUserName());
     }
 
     private void changeInitials(User user) {
-        ui.printMsg("Current initials = " + user.getInitials());
-        String newInitials = ui.getUserInput("Type the new initials");
+        ui.printMsg(Lang.msg("currentInitials") + " = " + user.getInitials());
+        String newInitials = ui.getUserInput(Lang.msg("enterInitials"));
         user.setInitials(newInitials);
-        ui.printMsg("Change initials to " + user.getInitials());
+        ui.printMsg(Lang.msg("initialsChangedTo") + ": " + user.getInitials());
     }
 
     private User getUser() {
@@ -171,7 +171,7 @@ public class UIController {
         int userId = -1;
         String input;
         try {
-            input = ui.getUserInput("Select a user by name or id");
+            input = ui.getUserInput(Lang.msg("selectUser"));
             try {
                 userId = Integer.parseInt(input);
                 if (userId > 99 || userId < 11) {
@@ -183,7 +183,7 @@ public class UIController {
             else
                 return userAdm.getUser(input);
         } catch (IUserAdministration.DataAccessException e) {
-            ui.printError("Could not find user. " + e.getMessage());
+            ui.printError(Lang.msg("errorFindUser") + "\n" + e.getMessage());
             return null;
         }
     }

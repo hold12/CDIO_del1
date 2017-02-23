@@ -5,12 +5,10 @@ import java.util.Scanner;
 /**
  * Created by Kasper on 14-02-2017.
  */
-public class TUI implements UI
-{
+public class TUI implements UI {
     private Scanner scanner;
 
-    public TUI()
-    {
+    public TUI() {
         scanner = new Scanner(System.in);
     }
 
@@ -18,7 +16,7 @@ public class TUI implements UI
     public String getMenuChoice(String... menuOptions) {
         int choice;
 
-        while(true) {
+        while (true) {
             for (int i = 0; i < menuOptions.length; i++) {
                 System.out.println(i + 1 + " - " + menuOptions[i]);
             }
@@ -26,7 +24,7 @@ public class TUI implements UI
             try {
                 choice = Integer.parseInt(getUserInput(lang.Lang.msg("selectNumber")));
                 System.out.println();
-                return menuOptions[choice-1];
+                return menuOptions[choice - 1];
             } catch (IndexOutOfBoundsException e) {
                 System.out.println(lang.Lang.msg("selectMenuItem"));
             } catch (Exception e) {
@@ -37,8 +35,7 @@ public class TUI implements UI
     }
 
     @Override
-    public void printMsg(String message)
-    {
+    public void printMsg(String message) {
         System.out.println(message);
     }
 
@@ -48,8 +45,7 @@ public class TUI implements UI
     }
 
     @Override
-    public String getUserInput(String message)
-    {
+    public String getUserInput(String message) {
         System.out.print(message + ": ");
         return scanner.nextLine();
     }

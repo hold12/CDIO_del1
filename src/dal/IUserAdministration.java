@@ -24,22 +24,16 @@ public interface IUserAdministration {
 
     void deleteUser(int userId) throws DataAccessException;
 
+    @SuppressWarnings("serial")
     class DataAccessException extends Exception {
-        public DataAccessException(String msg, Throwable e) {
-            super(msg, e);
-        }
-
         public DataAccessException(String msg) {
             super(msg);
         }
 
     }
 
+    @SuppressWarnings("serial")
     class DataValidationException extends Exception {
-        public DataValidationException(String msg, Throwable e) {
-            super(msg, e);
-        }
-
         public DataValidationException(String msg) {
             super(msg);
         }

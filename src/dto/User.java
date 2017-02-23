@@ -35,16 +35,6 @@ public class User {
         this.password = new Password(password);
     }
 
-    // Constructor to use when changing a user's password
-    public User(int userId, String userName, String initials, List<String> roles, String cpr, Password password) {
-        this.userId = userId;
-        this.userName = userName;
-        this.initials = initials;
-        this.roles = roles;
-        this.cpr = cpr;
-        this.password = password;
-    }
-
     public int getUserId() {
         return userId;
     }

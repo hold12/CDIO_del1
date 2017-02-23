@@ -9,18 +9,17 @@ import java.sql.*;
 public class DBConnection {
     private Connection connection;
     private Statement statement;
-    private PreparedStatement preparedStatement;
     private boolean connectionIsOpen;
 
     private String host, database, user, passwd;
     private int port;
 
     public DBConnection(String host, int port, String database, String user, String passwd) {
-        this.host     = host;
-        this.port     = port;
+        this.host = host;
+        this.port = port;
         this.database = database;
-        this.user     = user;
-        this.passwd   = passwd;
+        this.user = user;
+        this.passwd = passwd;
 
         this.connectionIsOpen = false;
     }
@@ -51,22 +50,21 @@ public class DBConnection {
     }
 
     private void open() throws ConnectionNeverClosedException {
-        if (connectionIsOpen) throw new ConnectionNeverClosedException("[DBConnection::open]: Database connection was never closed properly.");
+        if (connectionIsOpen)
+            throw new ConnectionNeverClosedException("[DBConnection::open]: Database connection was never closed properly.");
         if (!checkJDBCDriverExists()) return;
         if (!canConnectToServer()) return;
 
         if (connection != null) {
 //            System.out.println("[DBConnection::open]: Connection established.");
-        }
-        else
+        } else
             System.err.println("[DBConnection::open]: Failed to make a connection to the database server.");
     }
 
     public void close() {
         try {
             if (connection != null) this.connection.close();
-            if (statement != null)  this.statement.close();
-            if (preparedStatement != null) this.preparedStatement.close();
+            if (statement != null) this.statement.close();
         } catch (SQLException e) {
             System.err.println("[DBConnection::close]: Failed to close either database connection or statement.");
             e.printStackTrace();
@@ -110,13 +108,11 @@ public class DBConnection {
 
         statement = createStatement();
 
-        ResultSet result;
         try {
             statement.executeUpdate(updateSQL);
         } catch (SQLException e) {
             System.err.print("[DBConnection::query]: " + e.getMessage());
             e.printStackTrace();
-            return;
         }
     }
 
@@ -132,7 +128,10 @@ public class DBConnection {
         return stmt;
     }
 
-    class ConnectionNeverClosedException extends Exception {
-        public ConnectionNeverClosedException(String message) { super(message); }
+    @SuppressWarnings("serial")
+	class ConnectionNeverClosedException extends Exception {
+        public ConnectionNeverClosedException(String message) {
+            super(message);
+        }
     }
 }

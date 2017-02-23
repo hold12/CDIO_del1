@@ -3,7 +3,6 @@ import dal.DBConnection;
 import dal.UserAdministrationDB;
 import lang.Lang;
 import ui.TUI;
-import lang.Lang;
 
 /**
  * Created by freya on 14-02-2017.

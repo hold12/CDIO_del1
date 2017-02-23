@@ -56,21 +56,6 @@ public class UserAdministrationDB implements IUserAdministration {
         return user;
     }
 
-//    public User getUser(String username) throws DataAccessException {
-//        String sql = String.format("SELECT * FROM user WHERE username = '%s' LIMIT 1", username);
-//        System.out.println(sql);
-//        User user;
-//
-//        ResultSet resultSet = dbConnection.query(sql);
-//        try {
-//            user = getUserFromResultSet(resultSet);
-//        } catch (SQLException e) {
-//            return null;
-//        }
-//        return user;
-//    }
-
-    @Override
     public List<User> getUserList() throws DataAccessException {
         List<User> users = new ArrayList<>();
         ResultSet resultSet = dbConnection.query("SELECT * FROM user");

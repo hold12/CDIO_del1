@@ -197,7 +197,7 @@ public class UIController {
         selectedRoles = UserValidator.removeDuplicateRoles(user, selectedRoles);
 
         for (String role : selectedRoles)
-            userAdm.addRoleToUser(user, role);
+            user.addRole(role);
     }
 
     private void removeRoleFromUser(User user) {
@@ -218,10 +218,10 @@ public class UIController {
         ui.printMsg(currentRolesMsg);
 
         String[] selectedRoles = ui.getUserInput(Lang.msg("enterRoles")).split(",");
-        selectedRoles = UserValidator.ensureRoles(user, selectedRoles);
+        //selectedRoles = UserValidator.ensureRoles(user, selectedRoles);
 
         for (String role : selectedRoles)
-            userAdm.removeRoleFromUser(user, role);
+            user.removeRole(role);
     }
 
     private User getUser() {

@@ -1,8 +1,10 @@
 package controller;
 
+import dto.User;
+
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
-import java.util.Date;
+import java.util.*;
 
 /**
  * Created by freya on 21-02-2017.
@@ -39,6 +41,52 @@ public class UserValidator {
 
     public static boolean isUsernameValid(String username) {
             return username.length() <= 20 && username.length() >= 2 && containsAtLeastOneNonNumericCharacter(username);
+    }
+
+    public static String[] removeDuplicateRoles(User user, String[] selectedRoles) {
+        List<String> selectedLower = new ArrayList<>();
+        List<String> userRolesLower = new ArrayList<>();
+
+        for (int i = 0; i < selectedRoles.length; i++) {
+            selectedLower.add(selectedRoles[i].toLowerCase());
+        }
+
+        for (int i = 0; i < user.getRoles().size(); i++) {
+            userRolesLower.add(user.getRoles().get(i).toLowerCase());
+        }
+
+        for (int i = 0; i < selectedLower.size(); i++) {
+            for (String userRole : userRolesLower) {
+                if (selectedLower.get(i).equals(userRole))
+                    selectedLower.remove(i);
+            }
+        }
+
+        return selectedLower.stream().toArray(String[]::new);
+    }
+
+    public static String[] ensureRoles(User user, String[] selectedRoles) {
+        List<String> selectedLower = new ArrayList<>();
+        List<String> userRolesLower = new ArrayList<>();
+        List<String> result = new ArrayList<>();
+
+        for (int i = 0; i < selectedRoles.length; i++) {
+            selectedLower.add(selectedRoles[i].toLowerCase());
+        }
+
+        for (int i = 0; i < user.getRoles().size(); i++) {
+            userRolesLower.add(user.getRoles().get(i).toLowerCase());
+        }
+
+        for (int i = 0; i < selectedLower.size(); i++) {
+            for (String userRole : userRolesLower) {
+                if (selectedLower.get(i).equals(userRole))
+                    result.add(userRole);
+//                    selectedLower.remove(i);
+            }
+        }
+
+        return result.stream().toArray(String[]::new);
     }
 
     private static boolean containsAtLeastOneNonNumericCharacter(String str) {

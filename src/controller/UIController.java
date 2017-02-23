@@ -119,9 +119,9 @@ public class UIController {
                 Lang.msg("changeUsername"),
                 Lang.msg("changeInitials"),
                 Lang.msg("generateNewPassword"),
-                /*Lang.msg("addRoles"),*/
-                /*Lang.msg("removeRoles"),*/
-                Lang.msg("cancel"), // TODO: Add Cancel
+                Lang.msg("addRoles"),
+                Lang.msg("removeRoles"),
+                Lang.msg("cancel"),
                 Lang.msg("finishEditing")
         };
 
@@ -136,9 +136,12 @@ public class UIController {
                 changeInitials(user);
             if (newUserChoice.equals(menuOptions[2])) // Generate New Password
                 user.generateNewPassword();
-            if (newUserChoice.equals(menuOptions[menuOptions.length - 2])) {
+            if (newUserChoice.equals(menuOptions[3])) // Add roles
+                addRolesToUser(user);
+            if (newUserChoice.equals(menuOptions[4])) // Remove roles
+                removeRoleFromUser(user);
+            if (newUserChoice.equals(menuOptions[menuOptions.length - 2]))
                 break;
-            }
             if (newUserChoice.equals(menuOptions[menuOptions.length - 1])) {
                 try {
                     userAdm.updateUser(user);
@@ -170,6 +173,55 @@ public class UIController {
             newInitials = ui.getUserInput(Lang.msg("enterInitials"));
         user.setInitials(newInitials);
         ui.printMsg(Lang.msg("initialsChangedTo") + ": " + user.getInitials());
+    }
+
+    private void addRolesToUser(User user) {
+        ui.printMsg(Lang.msg("availableRoles"));
+        outputRoles();
+
+        String currentRolesMsg = "\"" + user.getUserName() + "\" " + Lang.msg("currentRolesAssigned") + ": ";
+
+        if (user.getRoles().size() == 0)
+            currentRolesMsg += Lang.msg("none");
+
+        for (int i = 0; i < user.getRoles().size(); i++) {
+            if (i == 0)
+                currentRolesMsg += user.getRoles().get(i);
+            else
+                currentRolesMsg += ", " + user.getRoles().get(i);
+        }
+
+        ui.printMsg(currentRolesMsg);
+
+        String[] selectedRoles = ui.getUserInput(Lang.msg("enterRoles")).split(",");
+        selectedRoles = UserValidator.removeDuplicateRoles(user, selectedRoles);
+
+        for (String role : selectedRoles)
+            userAdm.addRoleToUser(user, role);
+    }
+
+    private void removeRoleFromUser(User user) {
+        String currentRolesMsg = "\"" + user.getUserName() + "\"" + Lang.msg("currentRolesAssigned") + ": ";
+
+        if (user.getRoles().size() == 0) {
+            currentRolesMsg += Lang.msg("none");
+            return;
+        }
+
+        for (int i = 0; i < user.getRoles().size(); i++) {
+            if (i == 0)
+                currentRolesMsg += user.getRoles().get(i);
+            else
+                currentRolesMsg += ", " + user.getRoles().get(i);
+        }
+
+        ui.printMsg(currentRolesMsg);
+
+        String[] selectedRoles = ui.getUserInput(Lang.msg("enterRoles")).split(",");
+        selectedRoles = UserValidator.ensureRoles(user, selectedRoles);
+
+        for (String role : selectedRoles)
+            userAdm.removeRoleFromUser(user, role);
     }
 
     private User getUser() {

@@ -147,12 +147,22 @@ public class UserAdministrationDB implements IUserAdministration {
             addRoleToUser(user, role);
     }
 
-    private void addRoleToUser(User user, String role) {
+    public void addRoleToUser(User user, String role) {
         int userId = user.getUserId();
         int roleId = getRoleId(role);
 
         String sql = String.format("INSERT INTO user_role (user_id,role_id) " +
                 "VALUES (%d,%d)", userId, roleId);
+
+        dbConnection.update(sql);
+        dbConnection.close();
+    }
+
+    public void removeRoleFromUser(User user, String role) {
+        int userId = user.getUserId();
+        int roleId = getRoleId(role);
+
+        String sql = String.format("DELETE FROM user_role WHERE user_id = %d AND role_id = %d", userId, roleId);
 
         dbConnection.update(sql);
         dbConnection.close();
@@ -213,6 +223,7 @@ public class UserAdministrationDB implements IUserAdministration {
             changeCount++;
             sql += " password = '" + user.getPassword().toString() + "'";
         }
+
         if (changeCount == 0) return; // No changes was made
         sql += "WHERE id = " + user.getUserId();
 

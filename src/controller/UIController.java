@@ -3,12 +3,13 @@ package controller;
 import dal.IUserAdministration;
 import dal.UserAdministrationDB;
 import dto.User;
-import lang.Lang;
 import ui.UI;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import lang.Lang;
 
 /**
  * Created by freya on 14-02-2017.
@@ -61,7 +62,7 @@ public class UIController {
     }
 
     private void listUsers() {
-        List<User> users = new ArrayList<>();
+        List<User> users;
         try {
             users = userAdm.getUserList();
         } catch (IUserAdministration.DataAccessException e) {
@@ -77,14 +78,14 @@ public class UIController {
     }
 
     private void createUser() {
-        String username;
-        String initials;
+        String username = "";
+        String initials = "";
         String cpr = "";
         String[] roles;
 
-        username = ui.getUserInput(Lang.msg("enterUsername"));
-        initials = ui.getUserInput(Lang.msg("enterInitials"));
-        while (!CprValidator.isCprValid(cpr))
+        while (!UserValidator.isUsernameValid(username)) username = ui.getUserInput(Lang.msg("enterUsername");
+        while (!UserValidator.isInitialsValid(initials)) initials = ui.getUserInput(Lang.msg("enterInitials"));
+        while (!UserValidator.isCprValid(cpr))
             cpr = ui.getUserInput(Lang.msg("enterCpr"));
         outputRoles();
         roles = ui.getUserInput(Lang.msg("enterRoles")).split(",");
@@ -93,7 +94,6 @@ public class UIController {
             userAdm.createUser(new User(-1, username, initials, Arrays.asList(roles), cpr));
         } catch (IUserAdministration.DataAccessException e) {
             ui.printError(Lang.msg("errorCreateUser") + "\n" + e.getMessage());
-//            e.printStackTrace();
             return;
         }
     }
@@ -108,7 +108,6 @@ public class UIController {
                 userAdm.deleteUser(user.getUserId());
             } catch (IUserAdministration.DataAccessException e) {
                 ui.printError(Lang.msg("errorDeleteUser") + "\n" + e.getMessage());
-//                e.printStackTrace();
                 return;
             }
         }
@@ -143,7 +142,6 @@ public class UIController {
                     userAdm.updateUser(user);
                 } catch (IUserAdministration.DataAccessException e) {
                     ui.printError(Lang.msg("errorEditUser") + "\n" + e.getMessage());
-//                    e.printStackTrace();
                     return;
                 }
                 break;
@@ -167,7 +165,6 @@ public class UIController {
     }
 
     private User getUser() {
-        User user;
         int userId = -1;
         String input;
         try {
@@ -188,8 +185,6 @@ public class UIController {
         }
     }
 
-
-    // TODO: Should not be in this class. Just here for convinience while debugging.
     private void outputRoles() {
         String[] roles;
         try {

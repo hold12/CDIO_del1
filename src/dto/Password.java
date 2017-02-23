@@ -59,10 +59,6 @@ public class Password {
         return index;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -71,5 +67,10 @@ public class Password {
         Password password1 = (Password) o;
 
         return password.equals(password1.password);
+    }
+
+    @Override
+    public String toString() {
+        return password;
     }
 }

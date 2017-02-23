@@ -30,7 +30,7 @@ public class UIController {
     public void mainMenu() {
         while (true) {
             final String[] menuOptions = {
-                    Lang.msg("createUsers"),
+                    Lang.msg("createUser"),
                     "Show Users",
                     "Edit User",
                     "Delete User",
@@ -62,7 +62,7 @@ public class UIController {
     }
 
     private void listUsers() {
-        List<User> users = new ArrayList<>();
+        List<User> users;
         try {
             users = userAdm.getUserList();
         } catch (IUserAdministration.DataAccessException e) {
@@ -76,15 +76,15 @@ public class UIController {
     }
 
     private void createUser() {
-        String username;
-        String initials;
+        String username = "";
+        String initials = "";
         String cpr = "";
         String[] roles;
 
-        username = ui.getUserInput("Enter a username");
-        initials = ui.getUserInput("Enter initials");
-        while (!CprValidator.isCprValid(cpr))
-            cpr = ui.getUserInput("Enter CPR");
+        while (!UserValidator.isUsernameValid(username)) username = ui.getUserInput("Enter a username");
+        while (!UserValidator.isInitialsValid(initials)) initials = ui.getUserInput("Enter initials");
+        while (!UserValidator.isCprValid(cpr))                cpr = ui.getUserInput("Enter CPR");
+
         outputRoles();
         roles = ui.getUserInput("Enter roles for user, separated by comma (,)").split(",");
 
@@ -92,7 +92,6 @@ public class UIController {
             userAdm.createUser(new User(-1, username, initials, Arrays.asList(roles), cpr));
         } catch (IUserAdministration.DataAccessException e) {
             ui.printError("An error occurred while creating a user. " + e.getMessage());
-//            e.printStackTrace();
             return;
         }
     }
@@ -107,7 +106,6 @@ public class UIController {
                 userAdm.deleteUser(user.getUserId());
             } catch (IUserAdministration.DataAccessException e) {
                 ui.printError("Could not delete user. " + e.getMessage());
-//                e.printStackTrace();
                 return;
             }
         }
@@ -143,7 +141,6 @@ public class UIController {
                     userAdm.updateUser(user);
                 } catch (IUserAdministration.DataAccessException e) {
                     ui.printError("An error occurred while editing a user. " + e.getMessage());
-//                    e.printStackTrace();
                     return;
                 }
                 break;
@@ -167,7 +164,6 @@ public class UIController {
     }
 
     private User getUser() {
-        User user;
         int userId = -1;
         String input;
         try {
@@ -188,8 +184,6 @@ public class UIController {
         }
     }
 
-
-    // TODO: Should not be in this class. Just here for convinience while debugging.
     private void outputRoles() {
         String[] roles;
         try {

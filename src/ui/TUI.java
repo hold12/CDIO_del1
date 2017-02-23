@@ -24,13 +24,14 @@ public class TUI implements UI
             }
 
             try {
-                choice = Integer.parseInt(getUserInput("Select number"));
+                choice = Integer.parseInt(getUserInput(lang.Lang.msg("selectNumber")));
                 System.out.println();
                 return menuOptions[choice-1];
             } catch (IndexOutOfBoundsException e) {
-                System.out.println("Selection out of bounds. Select one of the above menu items.");
+                System.out.println(lang.Lang.msg("selectMenuItem"));
             } catch (Exception e) {
-                System.out.println("You have to type a number!\n");
+                System.out.println("haveToTypeNumber");
+                System.out.println(lang.Lang.msg("haveToTypeNumber") + "!\n");
             }
         }
     }

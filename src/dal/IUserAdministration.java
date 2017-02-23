@@ -10,7 +10,9 @@ import java.util.List;
 
 public interface IUserAdministration {
 
+    public String[] getUserRoles() throws DataAccessException;
     User getUser(int userId) throws DataAccessException;
+    User getUser(String username) throws DataAccessException;
     List<User> getUserList() throws DataAccessException;
     void createUser(User user) throws DataAccessException;
     void updateUser(User user) throws DataAccessException;

@@ -1,6 +1,5 @@
 package dto;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,21 +10,43 @@ public class User {
 
     private int userId;
     private String userName;
-    private String ini;
+    private String initials;
     private List<String> roles;
     private String cpr;
-    private String password;
+    private Password password;
 
-    public User() {
-        this.roles = new ArrayList<>();
+    //constructor to create new users
+    public User(int userId, String userName, String initials, List<String> roles, String cpr) {
+        this.userId = userId;
+        this.userName = userName;
+        this.initials = initials;
+        this.roles = roles;
+        this.cpr = cpr;
+        this.password = new Password();
+    }
+
+    //constructor for use when extracting users from DB
+    public User(int userId, String userName, String initials, List<String> roles, String cpr, String password) {
+        this.userId = userId;
+        this.userName = userName;
+        this.initials = initials;
+        this.roles = roles;
+        this.cpr = cpr;
+        this.password = new Password(password);
+    }
+
+    // Constructor to use when changing a user's password
+    public User(int userId, String userName, String initials, List<String> roles, String cpr, Password password) {
+        this.userId = userId;
+        this.userName = userName;
+        this.initials = initials;
+        this.roles = roles;
+        this.cpr = cpr;
+        this.password = password;
     }
 
     public int getUserId() {
         return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     public String getUserName() {
@@ -36,36 +57,28 @@ public class User {
         this.userName = userName;
     }
 
-    public String getIni() {
-        return ini;
+    public String getInitials() {
+        return initials;
     }
 
-    public void setIni(String ini) {
-        this.ini = ini;
+    public void setInitials(String initials) {
+        this.initials = initials;
     }
 
     public String getCpr() {
         return cpr;
     }
 
-    public void setCpr(String cpr) {
-        this.cpr = cpr;
-    }
-
-    public String getPassword() {
+    public Password getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void generateNewPassword() {
+        this.password = new Password();
     }
 
     public List<String> getRoles() {
         return roles;
-    }
-
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
     }
 
     public void addRole(String role) {
@@ -82,7 +95,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User [userId=" + userId + ", userName=" + userName + ", ini=" + ini + ", roles=" + roles + "]";
+        return "User [userId=" + userId + ", userName=" + userName + ", initials=" + initials + ", roles=" + roles + "]";
     }
 
 

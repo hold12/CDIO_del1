@@ -1,6 +1,7 @@
 import controller.UIController;
 import dal.DBConnection;
 import dal.UserAdministrationDB;
+import lang.Lang;
 import ui.TUI;
 import lang.Lang;
 

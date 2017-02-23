@@ -76,15 +76,15 @@ public class UIController {
     }
 
     private void createUser() {
-        String username;
-        String initials;
+        String username = "";
+        String initials = "";
         String cpr = "";
         String[] roles;
 
-        username = ui.getUserInput("Enter a username");
-        initials = ui.getUserInput("Enter initials");
-        while (!UserValidator.isCprValid(cpr))
-            cpr = ui.getUserInput("Enter CPR");
+        while (!UserValidator.isUsernameValid(username)) username = ui.getUserInput("Enter a username");
+        while (!UserValidator.isInitialsValid(initials)) initials = ui.getUserInput("Enter initials");
+        while (!UserValidator.isCprValid(cpr))                cpr = ui.getUserInput("Enter CPR");
+
         outputRoles();
         roles = ui.getUserInput("Enter roles for user, separated by comma (,)").split(",");
 

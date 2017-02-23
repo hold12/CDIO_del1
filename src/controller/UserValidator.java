@@ -38,12 +38,15 @@ public class UserValidator {
     }
 
     public static boolean isUsernameValid(String username) {
+            return username.length() <= 20 && username.length() >= 2 && containsAtLeastOneNonNumericCharacter(username);
+    }
+
+    private static boolean containsAtLeastOneNonNumericCharacter(String str) {
         try {
-            Integer.parseInt(username);
-            // Fail if this has success. There shall be at least 1 non-numeric character.
+            Integer.parseInt(str);
             return false;
         } catch (Exception e) {
-            return username.length() <= 20 && username.length() >= 2;
+            return true;
         }
     }
 }
